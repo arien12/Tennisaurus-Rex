@@ -1,0 +1,175 @@
+html {
+background:#186D96;
+text-align:center;
+}
+
+html, body {
+margin:0;
+padding:0;
+}
+body{
+width:1000px;
+margin:0 auto;
+}
+#top{
+background:#0A4B6A;
+text-align:left;
+height:80px;
+width:1000px;
+border-top-left-radius:15px;
+-moz-border-radius-topleft:15px;
+border-top-right-radius:15px;
+-moz-border-radius-topright:15px;
+padding-top:5px;
+}
+
+#content{
+background:white;
+text-align:left;
+min-height:300px;
+width:630px;
+float:left;
+padding:10px;
+
+}
+
+nav{
+float:left;
+display:block;
+background:#285D77;
+width:200px;
+margin-top:7px;
+
+}
+
+#teamChoice{
+float:right;
+width:150px;
+margin-top:7px;
+padding-right:0px;
+margin-right:0px;
+}
+
+#footer{
+background:#ED8C1C;
+width:1000px;
+border-bottom-left-radius:15px;
+-moz-border-radius-bottomleft:15px;
+border-bottom-right-radius:15px;
+-moz-border-radius-bottomright:15px;
+float:left;
+}
+#bar{
+/**background:#0A4B6A;**/
+background:#ED8C1C;
+text-align:left;
+height:20px;
+width:1000px;
+}
+
+.loginInput{
+    font-size: 10px;
+    display: inline;
+    border: solid 1px #186D96;
+    width: 70px;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+#loginForm{
+float:left;
+}
+#login{
+float:right;
+}
+#register{
+float:right;
+margin-right:20px;
+list-style:none;
+height:15px;
+line-height:15px;
+background:#ED8C1C;
+padding:2px;
+}
+ul{
+border:0px;
+margin:0px;
+padding:0px;
+}
+#title{
+float:left;
+margin-left:10px;
+}
+
+nav ul li {
+height:25px;
+line-height:25px;
+list-style:none;
+text-align:left;
+padding-left:10px;
+color:#FFF;
+border-top:#fff solid;
+border-bottom:#fff solid;
+border-width:1px;
+cursor:pointer;
+}
+nav ul ul li {
+height:25px;
+line-height:25px;
+list-style:none;
+padding-left:10px;
+background:#63A5C5;
+margin-left:10px;
+text-align:left;
+color:#FFF;
+border-top:#fff solid;
+border-bottom:#fff solid;
+border-width:1px;
+cursor:pointer;
+}
+nav ul ul li:hover{
+background:#BC7F39;
+}
+#teamsList{
+padding-right:0px;
+}
+#teamsList li {
+
+background:#63A5C5;
+height:25px;
+line-height:25px;
+list-style:none;
+text-align:left;
+padding-left:10px;
+color:#FFF;
+border-top:#fff solid;
+border-bottom:#fff solid;
+border-width:1px;
+cursor:pointer;
+margin-right:2px;
+margin-left:10px;
+}
+
+#teamsList li:hover{
+margin-right:12px;
+margin-left:0px;
+}
+
+#middle{
+background:white;
+text-align:left;
+float:left;
+}
+
+#main{
+margin-top:10px;
+}
+
+#userlink{
+float:right;
+margin-right:20px;
+}
+
+#userlink a{
+text-decoration: none;
+}
