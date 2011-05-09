@@ -6,7 +6,7 @@
 </ul>
 <li>Tournaments</li>
 <ul>
-<li>View Tournaments</li>
+<li><?=anchor('tournamentcontroller', 'View Tournaments')?></li>
 <li>View Tournament Stats</li>
 </ul>
 <li>Players</li>

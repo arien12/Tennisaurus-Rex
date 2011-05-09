@@ -1,6 +1,7 @@
 <?php
 include_once('maincontroller.php');
 class TennisController extends MainController {
+	
     public function __construct ( ) {
         parent::__construct ( );
     }

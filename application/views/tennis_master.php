@@ -20,7 +20,7 @@
 			<mp:Teamchoice />
 		</div>
 		<div id="content">
-		<mp:Content />
+			<mp:Content />
 		</div>
 		<div id="background">
 		
