@@ -4,12 +4,12 @@ $this->load->helper('form');
 $attributes = array('id'=>'loginForm');
 echo form_open('tenniscontroller/login', $attributes);
 ?>			
-<label for="usernameInput">Username</label>
-<? $usernameinput = array(
-	'name'=>'usernameInput',
-	'id'=>'usernameInput',
+<label for="usernameInput">email</label>
+<? $emailInput = array(
+	'name'=>'emailInput',
+	'id'=>'emailInput',
 	'class'=>'loginInput');
-echo form_input($usernameinput);
+echo form_input($emailInput);
 ?>
 <label for="passwordInput">Password</label>
 <? $passwordinput = array(
