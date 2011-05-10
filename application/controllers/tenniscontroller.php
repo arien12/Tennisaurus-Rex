@@ -40,8 +40,9 @@ class TennisController extends MainController {
 		}
 		else{		
 			$players = $this->Player_model->get_players($playerId);
-				if(count($players) != 1 || $players[0]->password != $password)
+				if(count($players) != 1)
 			{
+				//@TODO::add an error page
 				redirect('tenniscontroller/register', 'refresh');		
 			}
 			else{
