@@ -40,12 +40,12 @@ class TennisController extends MainController {
 		}
 		else{		
 			$players = $this->Player->get_players($playerId);
-				if(count($players) != 1 || $players[0]['password'] != $password)
+				if(count($players) != 1 || $players[0]->password != $password)
 			{
 				redirect('tenniscontroller/register', 'refresh');		
 			}
 			else{
-			parent::addSessionInfo($players[0]['name'], $players[0]['idPlayer'], $players[0]['idPlayerType']);
+			parent::addSessionInfo($players[0]->name, $players[0]->idPlayer, $players[0]->idPlayerType);
 			redirect('tenniscontroller/index', 'refresh');
 			}
 		}
@@ -58,12 +58,12 @@ class TennisController extends MainController {
 		
 		$this->load->model('Player');
 		$players = $this->Player->get_players($data);
-		if(count($players) != 1 || $players[0]['password'] != $password)
+		if(count($players) != 1 || $players[0]->password != $password)
 		{
 			redirect('tenniscontroller/index', 'refresh');
 		}
 		else{
-			parent::addSessionInfo($players[0]['name'], $players[0]['idPlayer'], $players[0]['idPlayerType']);
+			parent::addSessionInfo($players[0]->name, $players[0]->idPlayer, $players[0]->idPlayerType);
 			redirect('tenniscontroller/index', 'refresh');
 		}
 	}
