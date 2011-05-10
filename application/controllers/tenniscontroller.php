@@ -45,7 +45,7 @@ class TennisController extends MainController {
 	}
 	
 	public function login() {
-		$this->load->model('Security');
+		$this->load->helper('Security');
 		$data['email'] = $_POST['emailInput'];
 		$password = do_hash($_POST['passwordInput'], 'md5');
 		
