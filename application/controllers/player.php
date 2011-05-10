@@ -8,11 +8,11 @@ class Player extends MainController {
 
     public function index ( ) {
       parent::setupMaster();
-      	$this->load->model('Player');
+      	$this->load->model('Player_model');
       	$playerId = array(
       	'idPlayer' => $this->uri->segment(2));
       	
-		$players = $this->Player->get_players($playerId);
+		$players = $this->Player_model->get_players($playerId);
             
       	$data = array(
       		'name' => $players[0]->name,
