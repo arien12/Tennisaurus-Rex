@@ -32,10 +32,11 @@ class MainController extends CI_Controller {
 			}
 		}
 	   
-	   protected function addSessionInfo($name, $email) {
+	   protected function addSessionInfo($name, $idPlayer, $idPlayerType) {
 		$userdata = array(
 			'name'=>$name,
-			'email'=>$email,
+			'idPlayer'=>$idPlayer,
+			'idPlayerType'=>$idPlayerType,
 			'loggedin'=>TRUE
 		);
 		$this->session->set_userdata($userdata);
@@ -45,6 +46,7 @@ class MainController extends CI_Controller {
 		$userdata = array(
 			'loggedin'=>FALSE
 		);
+		$this->session->sess_destroy();
 			$this->session->set_userdata($userdata);
 		}
     }
