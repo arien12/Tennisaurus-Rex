@@ -31,7 +31,7 @@ class TennisController extends MainController {
 		$data['idPlayerType'] = 3;
 		
 		//TODO::add a captcha, validation, send an email, update db
-		$this->load->model('Player');
+		$this->load->model('Player_model');
 		$playerId = array(
 			'idPlayer' => $this->Player->insert_player($data));
 		if($playerId['idPlayer']== False)
@@ -56,7 +56,7 @@ class TennisController extends MainController {
 		$data['email'] = $_POST['emailInput'];
 		$password = do_hash($_POST['passwordInput'], 'md5');
 		
-		$this->load->model('Player');
+		$this->load->model('Player_model');
 		$players = $this->Player->get_players($data);
 		if(count($players) != 1 || $players[0]->password != $password)
 		{
