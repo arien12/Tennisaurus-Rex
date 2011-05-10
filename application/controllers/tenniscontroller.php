@@ -28,7 +28,7 @@ class TennisController extends MainController {
 		$data['email'] = $_POST['email'];
 		$this->load->helper('Security');
 		$data['password'] = do_hash($_POST['password'], 'md5');
-		$data['idPlayerType'] = 1;
+		$data['idPlayerType'] = 3;
 		
 		//TODO::add a captcha, validation, send an email, update db
 		$this->load->model('Player');
