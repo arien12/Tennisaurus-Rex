@@ -1,5 +1,5 @@
 <?php
-class Player extends CI_Model{
+class Team_model extends CI_Model{
 
 	function __construct()
 	{
@@ -11,11 +11,11 @@ class Player extends CI_Model{
 	 *
 	 * Option: Values
 	 * --------------
-	 * idPlayer
-	 * email
+	 * idTeam
 	 * name
-	 * password				in MD5 hash
-	 * idPlayerType
+	 * tag
+	 * isSingle
+	 * idPlayer
 	 * limit                limits the number of returned records
 	 * offset                how many records to bypass before returning a record (limit required)
 	 * sortBy                determines which column the sort takes place
@@ -23,27 +23,32 @@ class Player extends CI_Model{
 	 *
 	 * Returns (array of objects)
 	 * --------------------------
-	 * idPlayer
+	 * idTeam
 	 * name
-	 * email
-	 * password
-	 * idPlayerType
+	 * description
+	 * tag
+	 * isSingle
 	 *
 	 * @param array $data
 	 * @return array result()
 	 */
-	function get_players($data = array())
+	function get_teams($data = array())
 	{
 		// default values
 		$data = $this->_default(array('sortDirection' => 'asc'), $data);
 
 		// Add where clauses to query
-		$qualificationArray = array('idPlayer', 'email', 'idPlayerType', 'email');
+		$qualificationArray = array('idTeam', 'name', 'isSingle', 'tag');
 		foreach($qualificationArray as $qualifier)
 		{
 			if(isset($data[$qualifier])) $this->db->where($qualifier, $data[$qualifier]);
 		}
-
+		
+		//join to PlayerTeam is idPlayer specified
+		if(isset($data['idPlayer'])){
+			$this->db->join('playerteam', 'idPlayer = ' . $data['idPlayer'] . ' AND playerteam.idTeam = team.idTeam');
+		}
+		
 		// If limit / offset are declared (usually for pagination) then we need to take them into account
 		if(isset($data['limit']) && isset($data['offset'])) $this->db->limit($data['limit'], $data['offset']);
 		else if(isset($data['limit'])) $this->db->limit($data['limit']);
@@ -51,7 +56,7 @@ class Player extends CI_Model{
 		// sort
 		if(isset($data['sortBy'])) $this->db->order_by($data['sortBy'], $data['sortDirection']);
 
-		$query = $this->db->get('player');
+		$query = $this->db->get('team');
 		if($query->num_rows() == 0) return false;
 
 		// returns an array of objects
@@ -64,109 +69,102 @@ class Player extends CI_Model{
 	 *
 	 * Option: Values
 	 * --------------
-	 * email				(required)
-	 * password			(required) in MD5 hash
-	 * name				(required)
-	 * idPlayerType		(required)
+	 * name			(required)
+	 * tag			(required)
+	 * description	(required)
+	 * isSingle		(required)
+	 * idPlayer1	(required)
+	 * idPlayer2	(only required if isSingle is false)
 	 *
 	 * @param array $data
 	 */
-	function insert_player($data = array())
+	function insert_team($data = array())
 	{
 		// required values
-		if(!$this->_required(array('email', 'name', 'password', 'idPlayerType'), $data)) return false;
+		$req_array = array('name', 'tag', 'description', 'isSingle', 'idPlayer1');
+		if (!$data['isSingle']) $req_array[] = 'idPlayer2';
+		if(!$this->_required($req_array, $data)) return false;
 
 		// default values
 		//$data = $this->_default(array('userStatus' => 'active'), $data);
 
 		// qualification (make sure that we're not allowing the site to insert data that it shouldn't)
-		$qualificationArray = array('email', 'name', 'password', 'idPlayerType');
+		$qualificationArray = array('name', 'tag', 'description', 'isSingle');
 		foreach($qualificationArray as $qualifier)
 		{
 			if(isset($data[$qualifier])) $this->db->set($qualifier, $data[$qualifier]);
 		}
 
 		// Execute the query
-		$this->db->insert('player');
-
+		$this->db->insert('team');
+		$new_team_id = $this->db->insert_id();
+		$this->db->set('idPlayer', $data['idPlayer1']);
+		$this->db->set('idTeam', $new_team_id);
+		$this->db->insert('playerteam');
+		if(!$data['isSingle']){
+			$this->db->set('idPlayer', $data['idPlayer2']);
+			$this->db->set('idTeam', $new_team_id);
+			$this->db->insert('playerteam');
+		}
 		// Return the ID of the inserted row, or false if the row could not be inserted
-		return $this->db->insert_id();
+		return $new_team_id;
 	}
 
 
 
 	/**
-	 * update_player method alters a record in the users table.
+	 * update_team method alters a record in the users table.
 	 *
 	 * Option: Values
 	 * --------------
-	 * idPlayer			(required) the ID of the user record that will be updated
-	 * email
-	 * password			must be MD5 hash
+	 * idTeam		(required)
 	 * name
-	 * idPlayerType
+	 * tag
+	 * description
 	 *
 	 * @param array $data
 	 * @return int affected_rows()
 	 */
-	function update_player($data = array())
+	function update_team($data = array())
 	{
 		// required values
-		if(!$this->_required(array('idPlayer'), $data)) return false;
+		if(!$this->_required(array('idTeam'), $data)) return false;
 
 		// qualification (make sure that we're not allowing the site to update data that it shouldn't)
-		$qualificationArray = array('email', 'name', 'password', 'idPlayerType');
+		$qualificationArray = array('name', 'tag', 'description');
 		foreach($qualificationArray as $qualifier)
 		{
 			if(isset($data[$qualifier])) $this->db->set($qualifier, $data[$qualifier]);
 		}
 
-		$this->db->where('idPlayer', $data['idPlayer']);
+		$this->db->where('idTeam', $data['idTeam']);
 
 		// Execute the query
-		$this->db->update('player');
+		$this->db->update('team');
 
 		// Return the number of rows updated, or false if the row could not be inserted
 		return $this->db->affected_rows();
 	}
 
 	/**
+	 *
 	 * NOT YET AVAILABLE (data integrity calls need to be implemented)
 	 *
-	 * delete_player method removes a record from the users table
+	 * delete_team method removes a record from the team table
 	 *
 	 * @param array $data
 	 */
 	/*
-	 function delete_player($data = array())
+	 function delete_team($data = array())
 	 {
 		// required values
-		if(!$this->_required(array('idPlayer'), $data)) return false;
+		if(!$this->_required(array('idTeam'), $data)) return false;
 
-		$this->db->where('idPlayer', $data['idPlayer']);
-		$this->db->delete('player');
+		$this->db->where('idTeam', $data['idTeam']);
+		$this->db->delete('team');
 		}
 		*/
 
-	/**
-	 * get_types returns an array with data from the playertype table
-	 * 
-	 * Option: Values
-	 * --------------
-	 * idPlayerType
-	 *
-	 * @param array $data
-	 * @return array result()
-	 */
-	function get_types($data = array())
-	{
-		if (isset($data['idPlayerType'])){
-			$this->db->where('idPlayerType', $data('idPlayerType'));
-		}
-		$query = $this->db->get('playertype');
-		// returns an array of objects
-		return $query->result();
-	}
 
 	//utility methods
 
