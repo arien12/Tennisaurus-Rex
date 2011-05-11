@@ -12,12 +12,22 @@ class Match_model extends CI_Model{
 	 * Option: Values
 	 * --------------
 	 * idMatch
-	 * numberOfSets
-	 * numberOfGames
-	 * completedDate
-	 * scheduledDate
-	 * idPlayer
-	 * idTeam
+	 * numberOfSets (array)
+	 * 	min
+	 * 	max
+	 * numberOfGames (array)
+	 * 	min
+	 * 	max
+	 * completedDate (array)
+	 * 	min
+	 * 	max
+	 * scheduledDate (array)
+	 * 	min
+	 * 	max
+	 * players (array of ints)
+	 * 	idPlayer
+	 * teams (array of ints)
+	 * 	idTeam
 	 * idGame
 	 * idSet
 	 * idRound
@@ -62,12 +72,17 @@ class Match_model extends CI_Model{
 	 * 			name
 	 *
 	 * @param array $data
-	 * @return array result()
+	 * @return array qualified match models
 	 */
-	
-	/* NOT READY YET!
-	function get_match_details($data = array())
-	{
+
+	/* @TODO: Finish Match_model->get_match_details 
+	 * 
+	 * 
+	 * NOT READY YET!
+	 * 
+	 * 
+	 function get_match_details($data = array())
+	 {
 		// default values
 		$data = $this->_default(array('sortDirection' => 'asc'), $data);
 
@@ -75,12 +90,12 @@ class Match_model extends CI_Model{
 		$qualificationArray = array('idTeam', 'name', 'isSingle', 'tag');
 		foreach($qualificationArray as $qualifier)
 		{
-			if(isset($data[$qualifier])) $this->db->where($qualifier, $data[$qualifier]);
+		if(isset($data[$qualifier])) $this->db->where($qualifier, $data[$qualifier]);
 		}
 
 		//join to PlayerTeam is idPlayer specified
 		if(isset($data['idPlayer'])){
-			$this->db->join('playerteam', 'idPlayer = ' . $data['idPlayer'] . ' AND playerteam.idTeam = team.idTeam');
+		$this->db->join('playerteam', 'idPlayer = ' . $data['idPlayer'] . ' AND playerteam.idTeam = team.idTeam');
 		}
 
 		// If limit / offset are declared (usually for pagination) then we need to take them into account
@@ -95,8 +110,135 @@ class Match_model extends CI_Model{
 
 		// returns an array of objects
 		return $query->result();
+		}
+		*/
+
+	/** get_match returns an array of detailed match objects
+	 *
+	 * Option: Values
+	 * --------------
+	 * idMatch
+	 * numberOfSets (array)
+	 * 	min
+	 * 	max
+	 * numberOfGames (array)
+	 * 	min
+	 * 	max
+	 * completedDate (array)
+	 * 	min
+	 * 	max
+	 * scheduledDate (array)
+	 * 	min
+	 * 	max
+	 * players (array of ints)
+	 * 	idPlayer
+	 * teams (array of ints)
+	 * 	idTeam
+	 * idRound
+	 * idTournament
+	 * limit                limits the number of returned records
+	 * offset                how many records to bypass before returning a record (limit required)
+	 * sortBy                determines which column the sort takes place
+	 * sortDirection        (asc, desc) sort ascending or descending (sortBy required)
+	 *
+	 * Returns (array of objects)
+	 * --------------------------
+	 * idMatch
+	 * numberOfSets
+	 * numberOfGames
+	 * completedDate
+	 * scheduledDate
+	 *
+	 * @param array $data
+	 * @return array result()
+	 */
+
+	function get_match($data = array())
+	{
+		// default values
+		$data = $this->_default(array('sortDirection' => 'asc'), $data);
+		
+		//select one match by it's id
+		if(isset($data['idMatch'])){
+			$this->db->where('idMatch', $data['idMatch']);
+			$query = $this->db->get('team');
+			if($query->num_rows() == 0) return false;
+
+			// returns an array of objects
+			return $query->result();
+
+		}
+		
+		//prevent duplicates from the joins
+		$this->db->distinct('idMatch, numberOfSets, numberOfGames, completedDate, scheduledDate');
+		
+		//restrict by players
+		if(isset($data['players'])){
+			$this->load->model('team_model');
+			$teams = $this->Team_model->get_teams(array('players' => $data['players']));
+			$teamIds = "";
+			foreach ($teams as $team) {
+				$teamIds .= $team->idTeam . ',';
+			}
+			$this->db->join('teammatch', 'teammatch.idTeam in (' . $teamIds . ')');
+		}
+		
+		
+		//restrict by teams
+		if(isset($data['teams'])){
+			$teamIds = "";
+			foreach ($data['teams'] as $idTeam) {
+				$teamIds .= $idTeam . ',';
+			}
+			$this->db->join('teammatch', 'teammatch.idTeam in (' . $teamIds . ')');
+		}
+		
+	
+		// Add where clauses to query
+		$qualificationRangeArray = array('scheduledDate', 'completedDate', 'numberOfGames', 'numberofSets');
+		foreach($qualificationRangeArray as $qualifier)
+		{
+			if(isset($data[$qualifier])){
+			$this->db->where($qualifier . ' >=',$data[$qualifier]['min'] );
+			$this->db->where($qualifier . ' <=',$data[$qualifier]['max'] );
+			}
+		}
+		
+		//restrict by scheduledDate
+		if(isset($data['scheduledDate'])){
+		}
+		
+		
+		//restrict by idRound
+		if(isset($data['idRound'])){
+			$this->db->join('roundmatch', 'roundmatch.idRound = ' . $data['idRoundMatch'] . ' AND match.idMatch = roundmatch.idMatch');
+		}
+		
+		//restrict by idTournament
+		if(isset($data['idTournament'])){
+			$this->load->model('Tournament_model');
+			$rounds = $this->Tournament_model->get_rounds(array('idTournament' => $data['idTournament']));
+			$roundIds = "";
+			foreach ($rounds as $round) {
+				$roundIds .= $round->idRound . ',';
+			}
+			$this->db->join('roundmatch', 'roundmatch.idRound in (' . $roundIds . ')');
+		}
+
+		// If limit / offset are declared (usually for pagination) then we need to take them into account
+		if(isset($data['limit']) && isset($data['offset'])) $this->db->limit($data['limit'], $data['offset']);
+		else if(isset($data['limit'])) $this->db->limit($data['limit']);
+
+		// sort
+		if(isset($data['sortBy'])) $this->db->order_by($data['sortBy'], $data['sortDirection']);
+
+		$query = $this->db->get('match');
+		if($query->num_rows() == 0) return false;
+
+		// returns an array of objects
+		return $query->result();
 	}
-	*/
+
 
 
 	/**
@@ -223,14 +365,14 @@ class Match_model extends CI_Model{
 	 *
 	 * @param array $data
 	 */
-	/*
-	 function delete_team($data = array())
+	/*@TODO: Finish Match_model->delete_match 
+	 function delete_match($data = array())
 	 {
 		// required values
-		if(!$this->_required(array('idTeam'), $data)) return false;
+		if(!$this->_required(array('idMatch'), $data)) return false;
 
-		$this->db->where('idTeam', $data['idTeam']);
-		$this->db->delete('team');
+		$this->db->where('idMatch', $data['idMatch']);
+		$this->db->delete('match');
 		}
 		*/
 
