@@ -174,12 +174,7 @@ margin-right:20px;
 text-decoration: none;
 }
 
-/* Code for form styling */
-body { 
-	margin:0; 
-	padding:0; 
-	}
-	
+/* Code for form styling */	
 p {
 	margin:0 0 10px 0;
 	padding:0;
@@ -190,7 +185,7 @@ form.fstyle {
 	background:#eee;
 	margin:20px;
 	padding:10px 20px;
-	width:500px;	
+	width:550px;	
 	}
 	
 form.fstyle ol {
@@ -255,3 +250,5 @@ form.fstyle li#send button {
 form.fstyle li#send button:hover { 
 	background-color:#006633;
 }
+
+.ui-button-icon-only .ui-button-text { padding: 0.15em; }

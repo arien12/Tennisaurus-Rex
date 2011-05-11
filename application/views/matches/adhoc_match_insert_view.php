@@ -5,12 +5,32 @@
   <p>Please enter information to create an adhoc match:</p>
   <ol>
     <li>
-      <label for="player1">Player 1<em>*</em></label>
-      <input id="player1" />
+    	<div class="ui-widget">
+	      	<label for="player1">Player 1<em>*</em></label>
+		    <select id="combobox">
+				<?php if ($players): ?>
+					<?php foreach($players as $row): ?>
+						<?php if ($currUserId == $row->idPlayer): ?>
+							<option selected="selected" value="<?=$row->idPlayer?>"><?=$row->name?></option>
+						<?php else: ?>
+							<option value="<?=$row->idPlayer?>"><?=$row->name?></option>
+						<?php endif; ?>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			</select>
+		</div>
     </li>
     <li>
-      <label for="player2">Player 2<em>*</em></label>
-      <input id="player2" />
+    	<div class="ui-widget">
+	    	<label for="player2">Player 2<em>*</em></label>
+	      	<select id="combobox2">
+				<?php if ($players): ?>
+					<?php foreach($players as $row): ?>
+						<option value="<?=$row->idPlayer?>"><?=$row->name?></option>
+					<?php endforeach; ?>
+				<?php endif; ?>
+		  	</select>
+	  	</div>
     </li>
     <li id="send">
     	<button type="submit">Create Match</button>

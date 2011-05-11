@@ -17,8 +17,10 @@ class Adhoc_Matches extends MainController {
 	public function adhoc_match_insert_view ( ) {
       	parent::setupMaster();
 
+      	$this->load->model('Player_model');
+		$data = array('players' => $this->Player_model->get_players());
 		
-		$this->masterpage->addContentPage ( 'matches/adhoc_match_insert_view', 'content' );
+		$this->masterpage->addContentPage ( 'matches/adhoc_match_insert_view', 'content', $data );
 		
         // Show the masterpage to the world!
         $this->masterpage->show();

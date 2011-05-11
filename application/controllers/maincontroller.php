@@ -4,6 +4,7 @@ class MainController extends CI_Controller {
         parent::__construct ( );
         $this->load->library ( 'masterpage' );
 		$this->load->helper('url');
+		$this->load->helper('form');
 		$this->load->library('session');
     }
 	
@@ -40,6 +41,10 @@ class MainController extends CI_Controller {
 			'loggedin'=>TRUE
 		);
 		$this->session->set_userdata($userdata);
+		}
+		
+		protected function getCurrentUserId() {
+			return $this->session->userdata('idPlayer');
 		}
 		
 		protected function sessionlogout(){
