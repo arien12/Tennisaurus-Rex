@@ -23,7 +23,7 @@
 		</select>
     </li>
     <li id="send">
-    	<button type="submit" id="send">Create Tournament</button>
+    	<button type="submit">Create Tournament</button>
     </li>
   </ol>
 
