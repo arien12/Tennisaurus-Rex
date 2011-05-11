@@ -1,5 +1,5 @@
 <?php
-class Player extends CI_Model{
+class Player_model extends CI_Model{
 
 	function __construct()
 	{
@@ -131,17 +131,41 @@ class Player extends CI_Model{
 	}
 
 	/**
+	 * NOT YET AVAILABLE (data integrity calls need to be implemented)
+	 *
 	 * delete_player method removes a record from the users table
 	 *
 	 * @param array $data
 	 */
-	function delete_player($data = array())
-	{
+	/*
+	 function delete_player($data = array())
+	 {
 		// required values
 		if(!$this->_required(array('idPlayer'), $data)) return false;
 
 		$this->db->where('idPlayer', $data['idPlayer']);
 		$this->db->delete('player');
+		}
+		*/
+
+	/**
+	 * get_types returns an array with data from the playertype table
+	 * 
+	 * Option: Values
+	 * --------------
+	 * idPlayerType
+	 *
+	 * @param array $data
+	 * @return array result()
+	 */
+	function get_types($data = array())
+	{
+		if (isset($data['idPlayerType'])){
+			$this->db->where('idPlayerType', $data('idPlayerType'));
+		}
+		$query = $this->db->get('playertype');
+		// returns an array of objects
+		return $query->result();
 	}
 
 	//utility methods

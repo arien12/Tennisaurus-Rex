@@ -26,21 +26,47 @@ class TennisController extends MainController {
 		$data = array();
 		$data['name'] = $_POST['fname'].' '.$_POST['lname'];
 		$data['email'] = $_POST['email'];
-		$data['password'] = $_POST['password'];
-		//TODO::add a captcha, validation, send an email, update db
+		$this->load->helper('Security');
+		$data['password'] = do_hash($_POST['password'], 'md5');
+		$data['idPlayerType'] = 4;
 		
-		parent::addSessionInfo($data['name'], $data['email']);
-		redirect('tenniscontroller/index', 'refresh');
-	    
-
+		//TODO::add a captcha, validation, send an email, update db
+		$this->load->model('Player_model');
+		$playerId = array(
+			'idPlayer' => $this->Player_model->insert_player($data));
+		if($playerId['idPlayer']== False)
+		{
+			redirect('tenniscontroller/register', 'refresh');		
+		}
+		else{		
+			$players = $this->Player_model->get_players($playerId);
+				if(count($players) != 1)
+			{
+				//@TODO::add an error page
+				redirect('tenniscontroller/register', 'refresh');		
+			}
+			else{
+			parent::addSessionInfo($players[0]->name, $players[0]->idPlayer, $players[0]->idPlayerType);
+			redirect('tenniscontroller/index', 'refresh');
+			}
+		}
 	}
 	
 	public function login() {
-	$data['usernameInput'] = $_POST['usernameInput'];
-	$data['passwordInput'] = $_POST['passwordInput'];
-	
-		parent::addSessionInfo($data['usernameInput'], $data['passwordInput']);
-		redirect('tenniscontroller/index', 'refresh');
+		$this->load->helper('Security');
+		$data['email'] = $_POST['emailInput'];
+		$password = do_hash($_POST['passwordInput'], 'md5');
+		
+		$this->load->model('Player_model');
+		$players = $this->Player_model->get_players($data);
+		if(count($players) != 1 || $players[0]->password != $password)
+		{
+			redirect('tenniscontroller/index', 'refresh');
+		}
+		else{
+			parent::addSessionInfo($players[0]->name, $players[0]->idPlayer, $players[0]->idPlayerType);
+			redirect('tenniscontroller/index', 'refresh');
+		}
 	}
 	
 	public function logout(){
