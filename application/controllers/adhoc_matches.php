@@ -14,20 +14,19 @@ class Adhoc_Matches extends MainController {
         $this->masterpage->show ( );
     }
     
-	public function tournament_insert_view ( ) {
+	public function adhoc_match_insert_view ( ) {
       	parent::setupMaster();
-      	
-		$data['query'] = $this->db->get("tournamenttype");
+
 		
-		$this->masterpage->addContentPage ( 'tournament/tournament_insert_view', 'content', $data );
+		$this->masterpage->addContentPage ( 'matches/adhoc_match_insert_view', 'content' );
 		
         // Show the masterpage to the world!
         $this->masterpage->show();
     }
     
-	public function tournament_insert ( ) {
+	public function adhoc_match_insert ( ) {
       	
-		redirect('tournaments');
+		redirect('adhoc_matches');
     }
 	
 }
