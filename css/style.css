@@ -173,3 +173,85 @@ margin-right:20px;
 #userlink a{
 text-decoration: none;
 }
+
+/* Code for form styling */
+body { 
+	margin:0; 
+	padding:0; 
+	}
+	
+p {
+	margin:0 0 10px 0;
+	padding:0;
+	}
+
+form.fstyle {
+	font:13px Georgia, "Times New Roman", Times, serif;
+	background:#eee;
+	margin:20px;
+	padding:10px 20px;
+	width:500px;	
+	}
+	
+form.fstyle ol {
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+		
+form.fstyle li {
+	padding:6px;
+	background:#e1e1e1;
+	margin-bottom:1px;
+}
+			
+form.fstyle li#send {
+	background:none;
+	margin-top:6px;
+}
+		
+form.fstyle label {
+	float:left;
+	width:140px;
+	text-align:left;	
+	margin-right:7px;
+	color:#0066CC;
+	line-height:23px; /* This will make the labels vertically centered with the inputs */
+}
+
+form.fstyle label em {
+	color:#CC0000;
+}
+			
+form.fstyle input,
+form.fstyle textarea {
+	padding:4px;
+	font:13px Georgia, "Times New Roman", Times, serif;
+	border:1px solid #999999;
+	width:300px;
+}
+			
+form.fstyle input:focus,
+form.fstyle textarea:focus {
+	border:1px solid #666;
+	background:#e3f1f1;
+}
+
+form.fstyle li#send {
+	text-align:center;
+}
+			
+form.fstyle li#send button {
+	background:#003366;
+	border:none;
+	padding:4px 8px 4px 8px;
+	border-radius:15%; /* Don't expect this to work on IE6 or 7 */
+	-moz-border-radius:15%;
+	-webkit-border-radius:15%;			
+	color:#fff;
+	cursor:pointer;
+}
+			
+form.fstyle li#send button:hover { 
+	background-color:#006633;
+}

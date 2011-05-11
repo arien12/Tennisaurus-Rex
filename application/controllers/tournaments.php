@@ -14,7 +14,7 @@ class Tournaments extends MainController {
         $this->masterpage->show ( );
     }
     
-	public function tournament_insert ( ) {
+	public function tournament_insert_view ( ) {
       	parent::setupMaster();
       	
 		$data['query'] = $this->db->get("tournamenttype");
@@ -23,6 +23,11 @@ class Tournaments extends MainController {
 		
         // Show the masterpage to the world!
         $this->masterpage->show();
+    }
+    
+	public function tournament_insert ( ) {
+      	
+		redirect('tournaments');
     }
 	
 }
