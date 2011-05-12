@@ -12,7 +12,13 @@
 </ul>
 <li>Players</li>
 <ul>
-<li>Search Players</li>
+<li><?=anchor('player/playerlist', 'List Players')?></li>
 <li>Plater Stats</li>
+</ul>
+<li>Teams</li>
+<ul>
+<li><?=anchor('team/teamlist', 'List Teams')?></li>
+<li>Team Stats</li>
+<li><?=anchor('team/createteam', 'Create Team')?></li>
 </ul>
 </ul>

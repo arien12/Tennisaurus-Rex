@@ -46,6 +46,15 @@ class TennisController extends MainController {
 				redirect('tenniscontroller/register', 'refresh');		
 			}
 			else{
+			$this->load->model('Team_model');
+			$insertTeamData = array(
+				'name'=>$players[0]->name,
+				'tag'=> NULL,
+				'desc'=>NULL,
+				'isSingle'=>TRUE,
+				'idPlayer1'=>$players[0]->idPlayer
+			);
+			$this->Team_model->insert_team($insertTeamData);
 			parent::addSessionInfo($players[0]->name, $players[0]->idPlayer, $players[0]->idPlayerType);
 			redirect('tenniscontroller/index', 'refresh');
 			}
