@@ -45,6 +45,7 @@ class Team_model extends CI_Model{
 		}
 		
 		//join to PlayerTeam is idPlayer specified
+		//TODO change tema_model->get_teams use an array of player ids
 		if(isset($data['idPlayer'])){
 			$this->db->join('playerteam', 'idPlayer = ' . $data['idPlayer'] . ' AND playerteam.idTeam = team.idTeam');
 		}
@@ -69,8 +70,8 @@ class Team_model extends CI_Model{
 	 *
 	 * Option: Values
 	 * --------------
-	 * name			(required)
-	 * tag			(required)
+	 * name			(required if not single)
+	 * tag			(required if not single)
 	 * description	
 	 * isSingle		(required)
 	 * idPlayer1	(required)
