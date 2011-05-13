@@ -28,17 +28,30 @@ class Team extends MainController {
 		parent::setupMaster();
 		$this->load->model('Team_model');
 		$teams = $this->Team_model->get_teams();
-		$data = array(
+		if($teams != false){
+			$data = array(
 			'teams' => $teams
-		);
-		$this->masterpage->addContentPage ( 'team/list_team', 'content', $data );
-		$this->masterpage->show ( );
-		
+			);
+			$this->masterpage->addContentPage ( 'team/list_team', 'content', $data );
+			$this->masterpage->show ( );
+		}else {
+			echo 'fuck';
+		}
 	}
+
+
+public function createteam(){
+	parent::setupMaster();
+	$this->load->model('Player_model');
 	
-	public function createteam(){
-		
-	}
-	
+	$data = array(
+		'idPlayer'=>$this->session->userdata('idPlayer'),
+		'name'=>$this->session->userdata('name'),
+		'players'=>$this->Player_model->get_players()
+	);
+	$this->masterpage->addContentPage ( 'team/create_team', 'content', $data );
+	$this->masterpage->show ( );
+}
+
 }
 ?>

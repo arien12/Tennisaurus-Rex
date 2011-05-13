@@ -50,7 +50,7 @@ class TennisController extends MainController {
 			$insertTeamData = array(
 				'name'=>$players[0]->name,
 				'tag'=> NULL,
-				'desc'=>NULL,
+				'desc'=>'',
 				'isSingle'=>TRUE,
 				'idPlayer1'=>$players[0]->idPlayer
 			);
