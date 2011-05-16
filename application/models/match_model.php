@@ -113,7 +113,7 @@ class Match_model extends CI_Model{
 		}
 		*/
 
-	/** get_match returns an array of detailed match objects
+	/** get_matches returns an array of detailed match objects
 	 *
 	 * Option: Values
 	 * --------------
@@ -240,7 +240,7 @@ class Match_model extends CI_Model{
 
 
 	/**
-	 * insert_player method creates a record in the users table.
+	 * insert_match method creates a record in the matches table.
 	 *
 	 * Option: Values
 	 * --------------

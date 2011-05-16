@@ -8,8 +8,14 @@ class Adhoc_Matches extends MainController {
 
     public function index ( ) {
       	parent::setupMaster();
-		$this->masterpage->addContentPage ( 'matches/adhoc_matches_view', 'content' );
-	   
+      	
+      	$this->load->model('Match_model');
+		$matches = $this->Match_model->get_matches();
+		
+		$data = array('matches' => $matches);
+		
+		$this->masterpage->addContentPage ( 'matches/adhoc_matches_view', 'content', $data );
+		
         // Show the masterpage to the world!
         $this->masterpage->show ( );
     }
@@ -40,10 +46,31 @@ class Adhoc_Matches extends MainController {
         $this->masterpage->show();
     }
     
-	public function adhoc_match_insert ( ) {
-      	
+	public function insert_player_match ( ) {
 		redirect('adhoc_matches');
     }
 	
+	public function insert_team_match () {
+		$teamOne = $_POST['team1'];
+		$teamTwo = $_POST['team2'];
+		$numOfSets = $_POST['numOfSets'];
+		$numOfGames = $_POST['numOfGames'];
+		$court = $_POST['court'];
+		
+		$this->load->model('Match_model');
+		
+		$matchdata = array(
+			'teams'=>array($teamOne,$teamTwo),
+			'numOfSets'=>$numOfSets,
+			'numOfGames'=>$numOfGames,
+			'completedDate'=>date("Y-m-d"),
+			'scheduledDate'=>date("Y-m-d"),
+			'idRound'=>-1
+		);
+		
+		$matchID = $this->Match_model->insert_match($matchdata);
+		
+		redirect('adhoc_matches');
+	}
 }
 ?>
