@@ -113,7 +113,7 @@ class Match_model extends CI_Model{
 		}
 		*/
 
-	/** get_match returns an array of detailed match objects
+	/** get_matches returns an array of detailed match objects
 	 *
 	 * Option: Values
 	 * --------------
@@ -153,7 +153,7 @@ class Match_model extends CI_Model{
 	 * @return array result()
 	 */
 
-	function get_match($data = array())
+	function get_matches($data = array())
 	{
 		// default values
 		$data = $this->_default(array('sortDirection' => 'asc'), $data);
@@ -240,7 +240,7 @@ class Match_model extends CI_Model{
 
 
 	/**
-	 * insert_player method creates a record in the users table.
+	 * insert_match method creates a record in the matches table.
 	 *
 	 * Option: Values
 	 * --------------
