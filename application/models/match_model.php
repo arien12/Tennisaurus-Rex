@@ -310,7 +310,7 @@ class Match_model extends CI_Model{
 	 * @param array $data
 	 * @return int affected_rows()
 	 */
-	function update_team($data = array())
+	function update_match($data = array())
 	{
 		// required values
 		if(!$this->_required(array('idMatch'), $data)) return false;
