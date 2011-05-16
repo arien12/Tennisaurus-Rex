@@ -47,7 +47,7 @@ class Adhoc_Matches extends MainController {
     }
     
 	public function insert_player_match ( ) {
-
+		redirect('adhoc_matches');
     }
 	
 	public function insert_team_match () {
