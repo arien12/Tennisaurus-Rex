@@ -16,7 +16,8 @@ class Player extends MainController {
 
 		$data = array(
       		'name' => $players[0]->name,
-      		'email' => $players[0]->email
+      		'email' => $players[0]->email,
+			'idPlayerType' => $this->session->userdata('idPlayerType')
 		);
 		$this->masterpage->addContentPage ( 'player/profile', 'content', $data );
 
