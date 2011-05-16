@@ -18,7 +18,9 @@ class Adhoc_Matches extends MainController {
       	parent::setupMaster();
 
       	$this->load->model('Player_model');
-		$data = array('players' => $this->Player_model->get_players());
+      	$players = $this->Player_model->get_players();
+      	$currPlayerId = parent::getCurrentUserId();
+		$data = array('players' => $players, 'currPlayerId' => $currPlayerId);
 		
 		$this->masterpage->addContentPage ( 'matches/adhoc_match_insert_view', 'content', $data );
 		
