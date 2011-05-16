@@ -2,7 +2,9 @@
 		$.widget( "ui.combobox", {
 			_create: function() {
 				var self = this,
-					select = this.element.hide(),
+					select = this.element.find("select").first().hide(),
+					label = this.element.find("label").first(),
+					for_id = select.attr("id") + "_for_id",
 					selected = select.children( ":selected" ),
 					value = selected.val() ? selected.text() : "";
 				var input = this.input = $( "<input>" )
@@ -54,8 +56,11 @@
 							}
 						}
 					})
-					.addClass( "ui-widget ui-widget-content ui-corner-left" );
-
+					.addClass( "ui-widget ui-widget-content ui-corner-left" )
+					.attr("id", for_id);
+					
+				label.attr("for", for_id);
+				
 				input.data( "autocomplete" )._renderItem = function( ul, item ) {
 					return $( "<li></li>" )
 						.data( "item.autocomplete", item )
@@ -99,8 +104,3 @@
 			}
 		});
 	})( jQuery );
-
-	$(function() {
-		$( "#combobox" ).combobox();
-		$( "#combobox2" ).combobox();
-	});

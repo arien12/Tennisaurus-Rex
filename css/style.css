@@ -183,9 +183,9 @@ p {
 form.fstyle {
 	font:13px Georgia, "Times New Roman", Times, serif;
 	background:#eee;
-	margin:20px;
+	margin:5px;
 	padding:10px 20px;
-	width:550px;	
+	width:540px;	
 	}
 	
 form.fstyle ol {
@@ -252,3 +252,17 @@ form.fstyle li#send button:hover {
 }
 
 .ui-button-icon-only .ui-button-text { padding: 0.15em; }
+
+.ui-tabs {
+	border: none;
+}
+
+.ui-tabs-panel {
+	border-width: 1px!important;
+	border: 1px solid #AAAAAA!important;
+}
+
+.ui-widget-header {
+	border: none;
+	background: none;	
+}
