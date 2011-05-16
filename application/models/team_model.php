@@ -15,7 +15,8 @@ class Team_model extends CI_Model{
 	 * name
 	 * tag
 	 * isSingle
-	 * idPlayer
+	 * players (array of ONE or TWO player ids)
+	 * 	idPlayer
 	 * limit                limits the number of returned records
 	 * offset                how many records to bypass before returning a record (limit required)
 	 * sortBy                determines which column the sort takes place
@@ -37,19 +38,33 @@ class Team_model extends CI_Model{
 		// default values
 		$data = $this->_default(array('sortDirection' => 'asc'), $data);
 
+
+		//join to PlayerTeam is idPlayer specified
+		//TODO change tema_model->get_teams use an array of player ids
+		if(isset($data['players'])){
+			if(count($data['players']) > 1){
+				$this->db->where('idPlayer', $data['players'][0]);
+				$query = $this->db->get('player_team');
+				$playerOneTeamIds = "";
+				foreach($query->result() as $pt){
+					$playerOneTeamIds .= $pt->idTeam . ',';
+				}
+				$playerOneTeamIds = rtrim($playerOneTeamIds, ',');
+				$this->db->join('playerteam', 'idPlayer = ' . $data['players'][1] . ' AND playerteam.idTeam in ('.$playerOneTeamIds.') AND playerteam.idTeam = team.idTeam');
+			}
+			elseif(count($data['players']) = 1){
+				$this->db->join('playerteam', 'idPlayer = ' . $data['players'][0] . ' AND playerteam.idTeam = team.idTeam');
+			}
+		}
+
 		// Add where clauses to query
 		$qualificationArray = array('idTeam', 'name', 'isSingle', 'tag');
 		foreach($qualificationArray as $qualifier)
 		{
 			if(isset($data[$qualifier])) $this->db->where($qualifier, $data[$qualifier]);
 		}
-		
-		//join to PlayerTeam is idPlayer specified
-		//TODO change tema_model->get_teams use an array of player ids
-		if(isset($data['idPlayer'])){
-			$this->db->join('playerteam', 'idPlayer = ' . $data['idPlayer'] . ' AND playerteam.idTeam = team.idTeam');
-		}
-		
+
+
 		// If limit / offset are declared (usually for pagination) then we need to take them into account
 		if(isset($data['limit']) && isset($data['offset'])) $this->db->limit($data['limit'], $data['offset']);
 		else if(isset($data['limit'])) $this->db->limit($data['limit']);
@@ -72,7 +87,7 @@ class Team_model extends CI_Model{
 	 * --------------
 	 * name			(required if not single)
 	 * tag			(required if not single)
-	 * description	
+	 * description
 	 * isSingle		(required)
 	 * idPlayer1	(required)
 	 * idPlayer2	(only required if isSingle is false)
@@ -84,11 +99,11 @@ class Team_model extends CI_Model{
 		// required values
 		$req_array = array('isSingle', 'idPlayer1');
 		if(!$this->_required($req_array, $data)) return false;
-		if (!$data['isSingle']){ 
+		if (!$data['isSingle']){
 			$req_array = array('name', 'tag', 'idPlayer2');
 			if(!$this->_required($req_array, $data)) return false;
 		}
-		
+
 
 		// default values
 		$data = $this->_default(array('description' => ''), $data);

@@ -180,7 +180,8 @@ class Match_model extends CI_Model{
 			foreach ($teams as $team) {
 				$teamIds .= $team->idTeam . ',';
 			}
-			$this->db->join('teammatch', 'teammatch.idTeam in (' . $teamIds . ')');
+			$teamIds = rtrim($teamIds, ',');
+			$this->db->join('teammatch', 'teammatch.idTeam in (' . $teamIds . ') AND teammatch.idMatch = match.idMatch');
 		}
 		
 		
@@ -190,11 +191,11 @@ class Match_model extends CI_Model{
 			foreach ($data['teams'] as $idTeam) {
 				$teamIds .= $idTeam . ',';
 			}
-			$this->db->join('teammatch', 'teammatch.idTeam in (' . $teamIds . ')');
+			$this->db->join('teammatch', 'teammatch.idTeam in (' . $teamIds . ') AND teammatch.idMatch = match.idMatch');
 		}
 		
 	
-		// Add where clauses to query
+		// Add ranged where clauses to query (inclusive)
 		$qualificationRangeArray = array('scheduledDate', 'completedDate', 'numberOfGames', 'numberofSets');
 		foreach($qualificationRangeArray as $qualifier)
 		{
@@ -202,10 +203,6 @@ class Match_model extends CI_Model{
 			$this->db->where($qualifier . ' >=',$data[$qualifier]['min'] );
 			$this->db->where($qualifier . ' <=',$data[$qualifier]['max'] );
 			}
-		}
-		
-		//restrict by scheduledDate
-		if(isset($data['scheduledDate'])){
 		}
 		
 		
@@ -222,7 +219,8 @@ class Match_model extends CI_Model{
 			foreach ($rounds as $round) {
 				$roundIds .= $round->idRound . ',';
 			}
-			$this->db->join('roundmatch', 'roundmatch.idRound in (' . $roundIds . ')');
+			$roundIds = rtrim($roundIds, ','); 
+			$this->db->join('roundmatch', 'roundmatch.idRound in (' . $roundIds . ') AND match.idMatch = roundmatch.idMatch');
 		}
 
 		// If limit / offset are declared (usually for pagination) then we need to take them into account
