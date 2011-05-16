@@ -45,6 +45,7 @@ class Team_model extends CI_Model{
 		}
 		
 		//join to PlayerTeam is idPlayer specified
+		//TODO change tema_model->get_teams use an array of player ids
 		if(isset($data['idPlayer'])){
 			$this->db->join('playerteam', 'idPlayer = ' . $data['idPlayer'] . ' AND playerteam.idTeam = team.idTeam');
 		}
@@ -69,9 +70,9 @@ class Team_model extends CI_Model{
 	 *
 	 * Option: Values
 	 * --------------
-	 * name			(required)
-	 * tag			(required)
-	 * description	(required)
+	 * name			(required if not single)
+	 * tag			(required if not single)
+	 * description	
 	 * isSingle		(required)
 	 * idPlayer1	(required)
 	 * idPlayer2	(only required if isSingle is false)
@@ -81,12 +82,16 @@ class Team_model extends CI_Model{
 	function insert_team($data = array())
 	{
 		// required values
-		$req_array = array('name', 'tag', 'description', 'isSingle', 'idPlayer1');
-		if (!$data['isSingle']) $req_array[] = 'idPlayer2';
+		$req_array = array('isSingle', 'idPlayer1');
 		if(!$this->_required($req_array, $data)) return false;
+		if (!$data['isSingle']){ 
+			$req_array = array('name', 'tag', 'idPlayer2');
+			if(!$this->_required($req_array, $data)) return false;
+		}
+		
 
 		// default values
-		//$data = $this->_default(array('userStatus' => 'active'), $data);
+		$data = $this->_default(array('description' => ''), $data);
 
 		// qualification (make sure that we're not allowing the site to insert data that it shouldn't)
 		$qualificationArray = array('name', 'tag', 'description', 'isSingle');

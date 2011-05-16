@@ -22,13 +22,11 @@ class MainController extends CI_Controller {
 			$this->masterpage->addContentPage ( 'common/top', 'top' );
 			$this->masterpage->addContentPage ( 'common/bar', 'bar',  $data );
 			$this->masterpage->addContentPage ( 'common/mainnav', 'mainnav' );
-			$this->masterpage->addContentPage ( 'common/teamchoice', 'teamchoice' );
 			$this->masterpage->addContentPage ( 'common/footer', 'footer' );
 		}else{
 			$this->masterpage->addContentPage ( 'common/top_unlogged', 'top' );
 			$this->masterpage->addContentPage ( 'common/bar_unlogged', 'bar' );
 			$this->masterpage->addContentPage ( 'common/mainnav', 'mainnav' );
-			$this->masterpage->addContentPage ( 'common/teamchoice', 'teamchoice' );
 			$this->masterpage->addContentPage ( 'common/footer', 'footer' );
 			}
 		}

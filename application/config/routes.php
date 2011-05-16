@@ -40,7 +40,8 @@
 
 $route['default_controller'] = "tenniscontroller";
 $route['404_override'] = '';
-$route['player/(:num)'] = "player/index/$1";  
+$route['player/(:num)'] = "player/index/$1";
+$route['team/(:num)'] = "team/index/$1";    
 
 
 /* End of file routes.php */
