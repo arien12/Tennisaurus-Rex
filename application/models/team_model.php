@@ -17,6 +17,8 @@ class Team_model extends CI_Model{
 	 * isSingle
 	 * players (array of ONE or TWO player ids)
 	 * 	idPlayer
+	 * idMatch
+	 * idGame
 	 * limit                limits the number of returned records
 	 * offset                how many records to bypass before returning a record (limit required)
 	 * sortBy                determines which column the sort takes place
@@ -55,6 +57,14 @@ class Team_model extends CI_Model{
 			elseif(count($data['players']) = 1){
 				$this->db->join('playerteam', 'idPlayer = ' . $data['players'][0] . ' AND playerteam.idTeam = team.idTeam');
 			}
+		}
+		
+		if(isset($data['idMatch'])){
+			$this->db->join('teammatch', 'idMatch = ' . $data['idMatch'][1] . ' AND teammatch.idTeam = team.idTeam');
+		}
+		
+		if(isset($data['idGame'])){
+			$this->db->join('teamgame', 'idPlayer = ' . $data['players'][1] . ' AND teamgame.idTeam = team.idTeam');
 		}
 
 		// Add where clauses to query
