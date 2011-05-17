@@ -38,6 +38,9 @@ class Player_model extends CI_Model{
 		// default values
 		$data = $this->_default(array('sortDirection' => 'asc'), $data);
 
+		//prevent duplicates from the joins
+		$this->db->distinct('idPlayer, name, email, password, idPlayerType');
+		
 		// Add where clauses to query
 		$qualificationArray = array('idPlayer', 'email', 'idPlayerType', 'email');
 		foreach($qualificationArray as $qualifier)
