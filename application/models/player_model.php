@@ -38,6 +38,9 @@ class Player_model extends CI_Model{
 		// default values
 		$data = $this->_default(array('sortDirection' => 'asc'), $data);
 
+		//prevent duplicates from the joins
+		$this->db->distinct('idPlayer, name, email, password, idPlayerType');
+		
 		// Add where clauses to query
 		$qualificationArray = array('idPlayer', 'email', 'idPlayerType', 'email');
 		foreach($qualificationArray as $qualifier)
@@ -46,7 +49,7 @@ class Player_model extends CI_Model{
 		}
 		
 		if(isset($data['idTeam'])){
-			$this->db->join('playerteam', 'playerteam.idTeam = '.$data['idTeam'].' AND playerteam.idPlayer = player.idPlayer');
+			$this->db->join('playerteam', 'playerteam.idPlayer = player.idPlayer AND playerteam.idTeam = '.$data['idTeam']);
 		}
 
 		// If limit / offset are declared (usually for pagination) then we need to take them into account

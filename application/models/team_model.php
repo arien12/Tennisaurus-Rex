@@ -54,13 +54,16 @@ class Team_model extends CI_Model{
 				$playerOneTeamIds = rtrim($playerOneTeamIds, ',');
 				$this->db->join('playerteam', 'idPlayer = ' . $data['players'][1] . ' AND playerteam.idTeam in ('.$playerOneTeamIds.') AND playerteam.idTeam = team.idTeam');
 			}
-			elseif(count($data['players']) = 1){
+			elseif(count($data['players']) == 1){
 				$this->db->join('playerteam', 'idPlayer = ' . $data['players'][0] . ' AND playerteam.idTeam = team.idTeam');
 			}
 		}
 		
+		//prevent duplicates from the joins
+		$this->db->distinct('idTeam, name, description, tag, isSingle');
+		
 		if(isset($data['idMatch'])){
-			$this->db->join('teammatch', 'idMatch = ' . $data['idMatch'][1] . ' AND teammatch.idTeam = team.idTeam');
+			$this->db->join('teammatch', 'teammatch.idTeam = team.idTeam AND idMatch = ' . $data['idMatch']);
 		}
 		
 		if(isset($data['idGame'])){
