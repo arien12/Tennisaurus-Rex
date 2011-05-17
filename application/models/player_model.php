@@ -16,7 +16,7 @@ class Player_model extends CI_Model{
 	 * name
 	 * password				in MD5 hash
 	 * idPlayerType
-	 * idTeam
+	 * idTeam				filter by team ID or an array of team IDs
 	 * limit                limits the number of returned records
 	 * offset                how many records to bypass before returning a record (limit required)
 	 * sortBy                determines which column the sort takes place
@@ -49,7 +49,15 @@ class Player_model extends CI_Model{
 		}
 		
 		if(isset($data['idTeam'])){
-			$this->db->join('playerteam', 'playerteam.idPlayer = player.idPlayer AND playerteam.idTeam = '.$data['idTeam']);
+			$teamIds = array();
+			if (!is_array($data['idTeam'])) {
+				$teamIds = array($data['idTeam']);
+			}
+			else {
+				$teamIds = $data['idTeam'];
+			};
+			$this->db->where_in('playerteam.idTeam',$teamIds);
+			$this->db->join('playerteam', 'playerteam.idPlayer = player.idPlayer');
 		}
 
 		// If limit / offset are declared (usually for pagination) then we need to take them into account

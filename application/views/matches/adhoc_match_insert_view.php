@@ -21,7 +21,7 @@
 		  <ol>
 		    <li>
 		    	<div class="ui-widget" id="player1_combobox">
-			      	<label for="player1" id="test">Player 1<em>*</em></label>
+			      	<label for="player1">Player 1<em>*</em></label>
 				    <select id="player1">
 				    	<option value="-1"></option>
 						<?php if ($players): ?>

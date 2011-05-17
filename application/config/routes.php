@@ -42,7 +42,7 @@ $route['default_controller'] = "tenniscontroller";
 $route['404_override'] = '';
 $route['player/(:num)'] = "player/index/$1";
 $route['team/(:num)'] = "team/index/$1";    
-
+$route['adhoc_matches/(:num)'] = "adhoc_matches/index/$1";  
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
