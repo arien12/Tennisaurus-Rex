@@ -30,19 +30,20 @@ class Adhoc_Matches extends MainController {
 	public function adhoc_match_insert_view ( ) {
       	parent::setupMaster();
 
-      	// Load players
-      	$this->load->model('Player_model');
-      	$players = $this->Player_model->get_players();
-      	
-      	// Load teams
       	$this->load->model('Team_model');
+      	
+      	// Load singles teams
+      	$teamsWhere = array('isSingle' => 1 );
+      	$players = $this->Team_model->get_teams($teamsWhere);
+      	
+      	// Load doubles teams
       	$teamsWhere = array('isSingle' => 0 );
       	$teams = $this->Team_model->get_teams($teamsWhere);
       	
       	// Find out who the logged in player is
       	$currPlayerId = parent::getCurrentUserId();
       	
-      	// Set up infor for view
+      	// Set up info for view
 		$data = array('players' => $players, 
 					  'teams' => $teams,
 					  'currPlayerId' => $currPlayerId);

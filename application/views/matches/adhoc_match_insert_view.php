@@ -26,10 +26,10 @@
 				    	<option value="-1"></option>
 						<?php if ($players): ?>
 							<?php foreach($players as $row): ?>
-								<?php if ($currPlayerId == $row->idPlayer): ?>
-									<option selected="selected" value="<?=$row->idPlayer?>"><?=$row->name?></option>
+								<?php if ($currPlayerId == $row->idTeam): ?>
+									<option selected="selected" value="<?=$row->idTeam?>"><?=$row->name?></option>
 								<?php else: ?>
-									<option value="<?=$row->idPlayer?>"><?=$row->name?></option>
+									<option value="<?=$row->idTeam?>"><?=$row->name?></option>
 								<?php endif; ?>
 							<?php endforeach; ?>
 						<?php endif; ?>
@@ -43,7 +43,7 @@
 			      		<option value="-1"></option>
 						<?php if ($players): ?>
 							<?php foreach($players as $row): ?>
-								<option value="<?=$row->idPlayer?>"><?=$row->name?></option>
+								<option value="<?=$row->idTeam?>"><?=$row->name?></option>
 							<?php endforeach; ?>
 						<?php endif; ?>
 				  	</select>
@@ -63,7 +63,7 @@
 			      	<option value="-1"></option>
 					<?php if ($players): ?>
 						<?php foreach($players as $row): ?>
-							<option value="<?=$row->idPlayer?>"><?=$row->name?></option>
+							<option value="<?=$row->idTeam?>"><?=$row->name?></option>
 						<?php endforeach; ?>
 					<?php endif; ?>
 				  </select>
@@ -118,7 +118,7 @@
 			      	<option value="-1"></option>
 					<?php if ($players): ?>
 						<?php foreach($players as $row): ?>
-							<option value="<?=$row->idPlayer?>"><?=$row->name?></option>
+							<option value="<?=$row->idTeam?>"><?=$row->name?></option>
 						<?php endforeach; ?>
 					<?php endif; ?>
 				  </select>
