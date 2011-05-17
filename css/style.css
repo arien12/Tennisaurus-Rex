@@ -251,6 +251,7 @@ form.fstyle li#send button:hover {
 	background-color:#006633;
 }
 
+/* jqueryui stuff */
 .ui-button-icon-only .ui-button-text { padding: 0.15em; }
 
 .ui-tabs {
@@ -269,4 +270,31 @@ form.fstyle li#send button:hover {
 .ui-widget-header {
 	border: none;
 	background: none;	
+}
+
+/* Match table styles */
+.matchTable th {
+	padding: 5px;
+	font:22px Georgia, "Times New Roman", Times, serif;	
+}
+
+.matchTable td {
+	text-align: center;
+	background:#e3f1f1;
+	padding: 12px 18px 12px 18px;
+	font:17px Georgia, "Times New Roman", Times, serif;	
+}
+
+.matchTable .total {
+	font:25px Georgia, "Times New Roman", Times, serif;
+	font-weight: bold;
+	padding: 5px;
+}
+
+.matchTable .winner {
+	color: #00CC00;
+}
+
+.matchTable .loser {
+	color: #FF3300;
 }
