@@ -225,6 +225,13 @@ form.fstyle textarea {
 	border:1px solid #999999;
 	width:300px;
 }
+
+form.fstyle select {
+	padding:4px;
+	font:13px Georgia, "Times New Roman", Times, serif;
+	border:1px solid #999999;
+	width:310px;
+}
 			
 form.fstyle input:focus,
 form.fstyle textarea:focus {
