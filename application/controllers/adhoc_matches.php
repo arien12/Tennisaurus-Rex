@@ -13,7 +13,7 @@ class Adhoc_Matches extends MainController {
       	
       	$idMatch = $this->uri->segment(2);
       	if ($idMatch) {
-      		view_match($idMatch);
+      		$this->view_match($idMatch);
       	}
       	else {
 	      	$matches = $this->Match_model->get_matches();
@@ -34,13 +34,13 @@ class Adhoc_Matches extends MainController {
       	}
     }
     
-    protected function view_match($idMatch) {
+    private function view_match($idMatch) {
     	$matches = $this->Match_model->get_matches(array('idMatch' => $idMatch));
     	
     	$this->load->model('Team_model');
-    	$teams = $this->Team_model->get_teams(array('idMatch' => $matches[1]->idMatch));
+    	$teams = $this->Team_model->get_teams(array('idMatch' => $matches[0]->idMatch));
     	
-    	$data = array('match' => $matches[1], 'teams' => $teams);
+    	$data = array('match' => $matches[0], 'teams' => $teams);
     	
     	$this->masterpage->addContentPage ( 'matches/adhoc_match_view', 'content', $data );
 			
