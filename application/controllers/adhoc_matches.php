@@ -64,8 +64,7 @@ class Adhoc_Matches extends MainController {
 			'numOfSets'=>$numOfSets,
 			'numOfGames'=>$numOfGames,
 			'completedDate'=>date("Y-m-d"),
-			'scheduledDate'=>date("Y-m-d"),
-			'idRound'=>-1
+			'scheduledDate'=>date("Y-m-d")
 		);
 		
 		$matchID = $this->Match_model->insert_match($matchdata);

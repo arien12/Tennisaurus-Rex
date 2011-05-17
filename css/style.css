@@ -257,6 +257,10 @@ form.fstyle li#send button:hover {
 	border: none;
 }
 
+.ui-tabs-nav a {
+	outline: 0;	
+}
+
 .ui-tabs-panel {
 	border-width: 1px!important;
 	border: 1px solid #AAAAAA!important;
