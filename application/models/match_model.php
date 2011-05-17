@@ -161,7 +161,7 @@ class Match_model extends CI_Model{
 		//select one match by it's id
 		if(isset($data['idMatch'])){
 			$this->db->where('idMatch', $data['idMatch']);
-			$query = $this->db->get('team');
+			$query = $this->db->get('match');
 			if($query->num_rows() == 0) return false;
 
 			// returns an array of objects
