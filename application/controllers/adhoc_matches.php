@@ -16,22 +16,26 @@ class Adhoc_Matches extends MainController {
       		$this->view_match($idMatch);
       	}
       	else {
-	      	$matches = $this->Match_model->get_matches();
-			
-			$this->load->model('Team_model');
-			$matchList = array();
-			foreach ($matches as $match){
-				$teams = $this->Team_model->get_teams(array('idMatch' => $match->idMatch));
-				array_push($matchList, array('match'=>$match, 'teams'=>$teams));
-			}
-			
-			$data = array('matchList' => $matchList);
-			
-			$this->masterpage->addContentPage ( 'matches/adhoc_matches_view', 'content', $data );
-			
-	        // Show the masterpage to the world!
-	        $this->masterpage->show ( );
+			$this->view_matches();
       	}
+    }
+    
+	private function view_matches() {
+		$matches = $this->Match_model->get_matches();
+			
+		$this->load->model('Team_model');
+		$matchList = array();
+		foreach ($matches as $match){
+			$teams = $this->Team_model->get_teams(array('idMatch' => $match->idMatch));
+			array_push($matchList, array('match'=>$match, 'teams'=>$teams));
+		}
+			
+		$data = array('matchList' => $matchList);
+			
+		$this->masterpage->addContentPage ( 'matches/adhoc_matches_view', 'content', $data );
+			
+	    // Show the masterpage to the world!
+	    $this->masterpage->show ( );
     }
     
     private function view_match($idMatch) {
@@ -43,6 +47,25 @@ class Adhoc_Matches extends MainController {
     	$data = array('match' => $matches[0], 'teams' => $teams);
     	
     	$this->masterpage->addContentPage ( 'matches/adhoc_match_view', 'content', $data );
+			
+	    // Show the masterpage to the world!
+	    $this->masterpage->show ( );
+    }
+    
+    public function add_game_view() {
+    	parent::setupMaster();
+    	
+    	$idMatch = $this->uri->segment(3);
+    	
+    	$this->load->model('Match_model');
+    	$matches = $this->Match_model->get_matches(array('idMatch' => $idMatch));
+    	
+    	$this->load->model('Team_model');
+    	$teams = $this->Team_model->get_teams(array('idMatch' => $idMatch));
+    	
+    	$data = array('match' => $matches[0], 'teams' => $teams);
+    	
+    	$this->masterpage->addContentPage ( 'games/adhoc_match_add_game_view', 'content', $data );
 			
 	    // Show the masterpage to the world!
 	    $this->masterpage->show ( );
