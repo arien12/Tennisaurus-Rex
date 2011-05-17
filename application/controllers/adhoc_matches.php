@@ -12,7 +12,14 @@ class Adhoc_Matches extends MainController {
       	$this->load->model('Match_model');
 		$matches = $this->Match_model->get_matches();
 		
-		$data = array('matches' => $matches);
+		$this->load->model('Team_model');
+		$matchList = array();
+		foreach ($matches as $match){
+			$teams = $this->Team_model->get_teams(array('idMatch' => $match->idMatch));
+			array_push($matchList, array('match'=>$match, 'teams'=>$teams));
+		}
+		
+		$data = array('matchList' => $matchList);
 		
 		$this->masterpage->addContentPage ( 'matches/adhoc_matches_view', 'content', $data );
 		
