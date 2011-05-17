@@ -5,11 +5,20 @@
 <ol>
 	<li>
 		<label for="team1Score" id="test"><?=$teams[0]->name."'s "?>Score</label>
-		<input type="text" id="team1Score" value="0"/>
+		<input type="text" id="team1Score" name="team1Score" value="0"/>
 	</li>
 	<li>
 		<label for="team2Score" id="test"><?=$teams[1]->name."'s "?> Score</label>
-		<input type="text" id="team2Score" value="0"/>
+		<input type="text" id="team2Score" name="team2Score" value="0"/>
+	</li>
+	<li>
+		<label for="server" id="server">Server</label>
+		<select id="server"  name="server">
+			<option value="-1"></option>
+			<?php foreach ($players as $player): ?>
+				<option value="<?=$player->idPlayer?>"><?=$player->name?></option>
+			<?php endforeach;?>
+		</select>
 	</li>
 	<li id="send">
 		<button type="submit">Add Game</button>

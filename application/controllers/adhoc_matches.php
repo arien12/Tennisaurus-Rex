@@ -63,7 +63,11 @@ class Adhoc_Matches extends MainController {
     	$this->load->model('Team_model');
     	$teams = $this->Team_model->get_teams(array('idMatch' => $idMatch));
     	
-    	$data = array('match' => $matches[0], 'teams' => $teams);
+    	$this->load->model('Player_model');
+    	$teamIds = array($teams[0]->idTeam,$teams[1]->idTeam);
+    	$players = $this->Player_model->get_players(array('idTeam' => $teamIds));
+    	
+    	$data = array('match' => $matches[0], 'teams' => $teams, 'players' => $players);
     	
     	$this->masterpage->addContentPage ( 'games/adhoc_match_add_game_view', 'content', $data );
 			
