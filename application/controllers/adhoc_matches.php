@@ -10,21 +10,42 @@ class Adhoc_Matches extends MainController {
       	parent::setupMaster();
       	
       	$this->load->model('Match_model');
-		$matches = $this->Match_model->get_matches();
-		
-		$this->load->model('Team_model');
-		$matchList = array();
-		foreach ($matches as $match){
-			$teams = $this->Team_model->get_teams(array('idMatch' => $match->idMatch));
-			array_push($matchList, array('match'=>$match, 'teams'=>$teams));
-		}
-		
-		$data = array('matchList' => $matchList);
-		
-		$this->masterpage->addContentPage ( 'matches/adhoc_matches_view', 'content', $data );
-		
-        // Show the masterpage to the world!
-        $this->masterpage->show ( );
+      	
+      	$idMatch = $this->uri->segment(2);
+      	if ($idMatch) {
+      		view_match($idMatch);
+      	}
+      	else {
+	      	$matches = $this->Match_model->get_matches();
+			
+			$this->load->model('Team_model');
+			$matchList = array();
+			foreach ($matches as $match){
+				$teams = $this->Team_model->get_teams(array('idMatch' => $match->idMatch));
+				array_push($matchList, array('match'=>$match, 'teams'=>$teams));
+			}
+			
+			$data = array('matchList' => $matchList);
+			
+			$this->masterpage->addContentPage ( 'matches/adhoc_matches_view', 'content', $data );
+			
+	        // Show the masterpage to the world!
+	        $this->masterpage->show ( );
+      	}
+    }
+    
+    protected function view_match($idMatch) {
+    	$matches = $this->Match_model->get_matches(array('idMatch' => $idMatch));
+    	
+    	$this->load->model('Team_model');
+    	$teams = $this->Team_model->get_teams(array('idMatch' => $matches[1]->idMatch));
+    	
+    	$data = array('match' => $matches[1], 'teams' => $teams);
+    	
+    	$this->masterpage->addContentPage ( 'matches/adhoc_match_view', 'content', $data );
+			
+	    // Show the masterpage to the world!
+	    $this->masterpage->show ( );
     }
     
 	public function adhoc_match_insert_view ( ) {
