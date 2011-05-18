@@ -29,6 +29,9 @@ class Team extends MainController {
 	public function teamlist(){
 		parent::setupMaster();
 		$this->load->model('Team_model');
+		$data = array(
+			'isSingle'=>FALSE
+		);
 		$teams = $this->Team_model->get_teams();
 		if($teams != false){
 			$data = array(

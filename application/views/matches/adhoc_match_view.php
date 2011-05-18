@@ -13,7 +13,7 @@
 		<td>3</td>
 		<td>3</td>
 		<td>2</td>
-		<td class="total winner">2</td>
+		<td class="total win">2</td>
 	</tr>
 	<tr>
 		<th><?=$teams[1]->name?></th>

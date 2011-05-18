@@ -16,17 +16,17 @@
 		<li><a href="#tabs-2">Doubles</a></li>
 	</ul>
 	<div id="tabs-1">
-		  <?=form_open('adhoc_matches/insert_player_match', array('class' => 'fstyle'));?>
+		  <?=form_open('adhoc_matches/insert_match', array('class' => 'fstyle'));?>
 		  <p>Please enter information to create an adhoc singles match:</p>
 		  <ol>
 		    <li>
 		    	<div class="ui-widget" id="player1_combobox">
-			      	<label for="player1">Player 1<em>*</em></label>
-				    <select id="player1">
+			      	<label for="team1">Player 1<em>*</em></label>
+				    <select id="team1" name="team1">
 				    	<option value="-1"></option>
 						<?php if ($players): ?>
 							<?php foreach($players as $row): ?>
-								<?php if ($currPlayerId == $row->idTeam): ?>
+								<?php if ($currTeamId == $row->idTeam): ?>
 									<option selected="selected" value="<?=$row->idTeam?>"><?=$row->name?></option>
 								<?php else: ?>
 									<option value="<?=$row->idTeam?>"><?=$row->name?></option>
@@ -38,8 +38,8 @@
 		    </li>
 		    <li>
 		    	<div class="ui-widget" id="player2_combobox">
-			    	<label for="player2">Player 2<em>*</em></label>
-			      	<select id="player2">
+			    	<label for="team2">Player 2<em>*</em></label>
+			      	<select id="team2" name="team2">
 			      		<option value="-1"></option>
 						<?php if ($players): ?>
 							<?php foreach($players as $row): ?>
@@ -51,15 +51,15 @@
 		    </li>
 		    <li>
 			    <label for="numOfSets"># of Sets: </label>
-				<input type="text" id="numOfSets" value="3" class="numText"/>
+				<input type="text" id="numOfSets" name="numOfSets" value="3" class="numText"/>
 		    </li>
 		    <li>
 			    <label for="numOfGames"># of Games Per Set: </label>
-				<input type="text" id="numOfGames" value="3" class="numText"/>
+				<input type="text" id="numOfGames" name="numOfGames" value="3" class="numText"/>
 		    </li>
 		    <li>
 			    <label for="court">Court: </label>
-			      <select id="court">
+			      <select id="court" name="court">
 			      	<option value="-1"></option>
 					<?php if ($players): ?>
 						<?php foreach($players as $row): ?>
@@ -75,7 +75,7 @@
 		  </form>
 	</div>
 	<div id="tabs-2">
-		  <?=form_open('adhoc_matches/insert_team_match', array('class' => 'fstyle'));?>
+		  <?=form_open('adhoc_matches/insert_match', array('class' => 'fstyle'));?>
 		  <p>Please enter information to create an adhoc doubles match:</p>
 		  <ol>
 		    <li>
