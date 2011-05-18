@@ -2,11 +2,12 @@
 
 <script>
 	$(function() {
-		$( "#dateCompleted" ).datepicker($.datepicker.regional[ "" ]);
+		$( "#completedDate" ).datetimepicker($.datepicker.regional[ "" ]);
 	});
 </script>
 
-<?=form_open('adhoc_matches/add_game/'.$currSetId, array('class' => 'fstyle'));?>
+<?=form_open('adhoc_matches/add_game', array('class' => 'fstyle'));?>
+<?=form_hidden('matchId', $match->idMatch);?>
 <p>Please enter information for the game:</p>
 <ol>
 	<li>
@@ -28,7 +29,7 @@
 	</li>
 	<li>
 		<label for="complatedDate">Date Completed</label>
-		<input type="text" id="completedDate" name="completedDate" value="<?=date("m/d/y");?>"/>
+		<input type="text" id="completedDate" name="completedDate" value="<?=date("m/d/y H:m");?>"/>
 	</li>
 	<li id="send">
 		<button type="submit">Add Game</button>

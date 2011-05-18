@@ -25,6 +25,8 @@
 	charset="UTF-8"></script>
 <script type="text/javascript"
 	src="<?=base_url()?>scripts/autocomplete.js"></script>
+<script type="text/javascript"
+	src="<?=base_url()?>scripts/datetimepicker.js"></script>
 </head>
 
 <body>
