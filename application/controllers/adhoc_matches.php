@@ -128,24 +128,22 @@ class Adhoc_Matches extends MainController {
       	$teams = $this->Team_model->get_teams($teamsWhere);
       	
       	// Find out who the logged in player is
-      	$currPlayerId = parent::getCurrentUserId();
+      	$currTeam = $this->Team_model->get_teams(array('idTeam' => parent::getCurrentUserId()));
+      	$currTeamId =  $currTeam[0]->idTeam;
       	
       	// Set up info for view
 		$data = array('players' => $players, 
 					  'teams' => $teams,
-					  'currPlayerId' => $currPlayerId);
+					  'currTeamId' => $currTeamId);
 		
 		$this->masterpage->addContentPage ( 'matches/adhoc_match_insert_view', 'content', $data );
 		
         // Show the masterpage to the world!
         $this->masterpage->show();
     }
-    
-	public function insert_player_match ( ) {
-		redirect('adhoc_matches');
-    }
 	
-	public function insert_team_match () {
+	public function insert_match() {
+
 		$teamOne = $_POST['team1'];
 		$teamTwo = $_POST['team2'];
 		$numOfSets = $_POST['numOfSets'];
