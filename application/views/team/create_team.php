@@ -1,4 +1,4 @@
-<<script type="text/javascript">
+<script type="text/javascript">
 $(function() {
 	$( "#p1div" ).combobox();
 	$( "#p2div" ).combobox();

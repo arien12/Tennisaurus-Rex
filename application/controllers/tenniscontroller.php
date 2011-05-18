@@ -23,42 +23,79 @@ class TennisController extends MainController {
 	}
 	
 	public function processregistration(){
-		$data = array();
-		$data['name'] = $_POST['fname'].' '.$_POST['lname'];
-		$data['email'] = $_POST['email'];
-		$this->load->helper('Security');
-		$data['password'] = do_hash($_POST['password'], 'md5');
-		$data['idPlayerType'] = 4;
+
+		//TODO::add a captcha, validation, send an email
+		$this->load->library("validation");
 		
-		//TODO::add a captcha, validation, send an email, update db
-		$this->load->model('Player_model');
-		$playerId = array(
-			'idPlayer' => $this->Player_model->insert_player($data));
-		if($playerId['idPlayer']== False)
-		{
-			redirect('tenniscontroller/register', 'refresh');		
-		}
-		else{		
-			$players = $this->Player_model->get_players($playerId);
-				if(count($players) != 1)
-			{
-				//@TODO::add an error page
-				redirect('tenniscontroller/register', 'refresh');		
-			}
-			else{
-			$this->load->model('Team_model');
-			$insertTeamData = array(
+		$fields['name'] = 'name';
+		$fields['password'] = 'password';
+		$fields['passwordvalidation'] = 'passwordvalidation';
+		$fields['email'] = 'email';
+		$this->validation->set_fields($fields);
+
+		$rules['name'] = 'trim|required';
+		$rules['password'] = 'trim|required|matches[passwordvalidation]';
+		$rules['passwordvalidation'] = 'trim|required';
+		$rules['email'] = 'trim|required|valid_email';
+		$this->validation->set_rules($rules);
+
+		if ($this->validation->run() == FALSE) {
+			$data = array(
+			'name' => $this->validation->name_error, 
+			'password' => $this->validation->password_error, 
+			'email' => $this->validation->email_error
+			);
+			echo json_encode($data);
+		} else {
+			$this->load->model('Player_model');
+			$nameCheckArray = array('name'=>$_POST['name']);
+			$nameCheck = $this->Player_model->get_players($nameCheckArray);
+			$emailCheckArray = array('email'=>$_POST['email']);
+			$emailCheck = $this->Player_model->get_players($emailCheckArray);
+			if($nameCheck == FALSE && $emailCheck == false){
+				$data = array();
+				$data['name'] = $_POST['name'];
+				$data['email'] = $_POST['email'];
+				$this->load->helper('Security');
+				$data['password'] = do_hash($_POST['password'], 'md5');
+				$data['idPlayerType'] = 4;
+
+				$playerId = array('idPlayer' => $this->Player_model->insert_player($data));
+				if($playerId['idPlayer']== False)
+				{
+					redirect('tenniscontroller/register', 'refresh');
+				}
+				else{
+					$players = $this->Player_model->get_players($playerId);
+					if(count($players) != 1)
+					{
+						//@TODO::add an error page
+						redirect('tenniscontroller/register', 'refresh');
+					}
+					else{
+						$this->load->model('Team_model');
+						$insertTeamData = array(
 				'name'=>$players[0]->name,
 				'tag'=> NULL,
 				'desc'=>'',
 				'isSingle'=>TRUE,
 				'idPlayer1'=>$players[0]->idPlayer
+						);
+						$this->Team_model->insert_team($insertTeamData);
+						parent::addSessionInfo($players[0]->name, $players[0]->idPlayer, $players[0]->idPlayerType);
+						redirect('tenniscontroller/index', 'refresh');
+					}
+				}
+
+			}else{
+				$data = array(
+			'name' => $this->validation->already_exists, 
+			'email' => $this->validation->already_exists
 			);
-			$this->Team_model->insert_team($insertTeamData);
-			parent::addSessionInfo($players[0]->name, $players[0]->idPlayer, $players[0]->idPlayerType);
-			redirect('tenniscontroller/index', 'refresh');
+			echo json_encode($data);
 			}
 		}
+		
 	}
 	
 	public function login() {
