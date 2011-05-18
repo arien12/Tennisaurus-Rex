@@ -2,7 +2,8 @@
 
 <script>
 	$(function() {
-		$( "#completedDate" ).datetimepicker($.datepicker.regional[ "" ]);
+		$.datepicker.setDefaults($.datepicker.regional[""]);
+		$( "#completedDate" ).datetimepicker({ampm: true});
 	});
 </script>
 
@@ -29,7 +30,7 @@
 	</li>
 	<li>
 		<label for="complatedDate">Date Completed</label>
-		<input type="text" id="completedDate" name="completedDate" value="<?=date("m/d/y H:m");?>"/>
+		<input type="text" id="completedDate" name="completedDate" value="<?=date("m/d/y h:i a");?>"/>
 	</li>
 	<li id="send">
 		<button type="submit">Add Game</button>

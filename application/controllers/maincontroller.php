@@ -6,6 +6,7 @@ class MainController extends CI_Controller {
 		$this->load->helper('url');
 		$this->load->helper('form');
 		$this->load->library('session');
+		date_default_timezone_set('America/St_Johns');  
     }
 	
 
