@@ -8,10 +8,12 @@ class Match_model extends CI_Model{
 	}
 
 	/** get_match_details returns an array of detailed match objects
+	 * 	Use the matches array, OR the other criteria
 	 *
 	 * Option: Values
 	 * --------------
-	 * idMatch
+	 * matches (array of ints)
+	 * 	idMatch
 	 * numberOfSets (array)
 	 * 	min
 	 * 	max
@@ -46,78 +48,90 @@ class Match_model extends CI_Model{
 	 * scheduledDate
 	 * idRound
 	 *
-	 * teams (array)
+	 * teams (array of objects)
+	 * 	idTeam
 	 * 	name
+	 * 	description
 	 * 	tag
 	 * 	isSingle
-	 * 	players (array)
+	 * 	players (array of objects)
 	 * 		idPlayer
 	 * 		name
+	 * 		email
+	 * 		password
+	 * 		idPlayerType
 	 *
-	 * tournament (array)
+	 * tournament (object) //not yet..
 	 * 	idTournament
 	 * 	name
+	 * 
+	 * round (object) //not yet..
+	 * 	idRound
+	 * 	idTournament
+	 * 	completedDate
 	 *
-	 * sets (array)
+	 * sets (array of objects)
 	 * 	idSet
 	 * 	completedDate
-	 * 	games (array)
+	 * 	games (array of objects)
 	 * 		idGame
 	 * 		idServingTeam
 	 * 		idReceivingTeam
 	 * 		pointsServingTeam
 	 * 		pointsReceivingTeam
-	 * 		server (array)
+	 * 		server (object)
 	 * 			idPlayer
 	 * 			name
+	 * 			email
+	 * 			password
+	 * 			idPlayerType
 	 *
 	 * @param array $data
 	 * @return array qualified match models
 	 */
 
-	/* @TODO: Finish Match_model->get_match_details 
-	 * 
-	 * 
-	 * NOT READY YET!
-	 * 
-	 * 
-	 function get_match_details($data = array())
-	 {
-		// default values
-		$data = $this->_default(array('sortDirection' => 'asc'), $data);
 
-		// Add where clauses to query
-		$qualificationArray = array('idTeam', 'name', 'isSingle', 'tag');
-		foreach($qualificationArray as $qualifier)
-		{
-		if(isset($data[$qualifier])) $this->db->where($qualifier, $data[$qualifier]);
+	function get_match_details($data = array())
+	{
+			
+		$toReturn = $this->get_matches($data);
+			
+		if(!$toReturn) return false;
+			
+		$this->load->model('team_model');
+		$this->load->model('player_model');
+		//$this->load->model('tournament_model');
+		
+		foreach($toReturn as $aMatch){
+			//get teams data
+			$aMatch->teams = $this->Team_model->get_teams(array('idMatch' => $aMatch->idMatch));
+			
+			foreach ($aMatch->teams as $aTeam){
+				//get players for team
+				$aTeam->players = $this->Player_model->get_players(array('idTeam' => $aTeam->idTeam));
+			}
+			
+			//Get Sets and Games
+			$aMatch->sets = $this->get_sets($aMatch->idMatch);
+
+			/*TODO: Get Tournament and round
+			 $tempArray = $this->Tournament_model->get_tournaments($aMatch['idMatch']);
+			 $aMatch['tournament'] = $tempArray[0];
+			 $tempArray = $this->Tournament_model->get_rounds($aMatch['idMatch']);
+			 $aMatch['round'] = $tempArray[0];
+			 */
+
 		}
-
-		//join to PlayerTeam is idPlayer specified
-		if(isset($data['idPlayer'])){
-		$this->db->join('playerteam', 'idPlayer = ' . $data['idPlayer'] . ' AND playerteam.idTeam = team.idTeam');
-		}
-
-		// If limit / offset are declared (usually for pagination) then we need to take them into account
-		if(isset($data['limit']) && isset($data['offset'])) $this->db->limit($data['limit'], $data['offset']);
-		else if(isset($data['limit'])) $this->db->limit($data['limit']);
-
-		// sort
-		if(isset($data['sortBy'])) $this->db->order_by($data['sortBy'], $data['sortDirection']);
-
-		$query = $this->db->get('team');
-		if($query->num_rows() == 0) return false;
-
-		// returns an array of objects
-		return $query->result();
-		}
-		*/
+		return $toReturn;
+	}
 
 	/** get_matches returns an array of detailed match objects
+	 * 	Use the matches array, OR the other criteria
 	 *
 	 * Option: Values
 	 * --------------
-	 * idMatch
+	 * matches (array of ints)
+	 * 	idMatch
 	 * numberOfSets (array)
 	 * 	min
 	 * 	max
@@ -134,6 +148,8 @@ class Match_model extends CI_Model{
 	 * 	idPlayer
 	 * teams (array of ints)
 	 * 	idTeam
+	 * idGame
+	 * idSet
 	 * idRound
 	 * idTournament
 	 * limit                limits the number of returned records
@@ -157,10 +173,10 @@ class Match_model extends CI_Model{
 	{
 		// default values
 		$data = $this->_default(array('sortDirection' => 'asc'), $data);
-		
+
 		//select one match by it's id
-		if(isset($data['idMatch'])){
-			$this->db->where('idMatch', $data['idMatch']);
+		if(isset($data['matches'])){
+			$this->db->where_in('idMatch', $data['matches']);
 			$query = $this->db->get('match');
 			if($query->num_rows() == 0) return false;
 
@@ -168,10 +184,10 @@ class Match_model extends CI_Model{
 			return $query->result();
 
 		}
-		
+
 		//prevent duplicates from the joins
 		$this->db->distinct('idMatch, numberOfSets, numberOfGames, completedDate, scheduledDate');
-		
+
 		//restrict by players
 		if(isset($data['players'])){
 			$this->load->model('team_model');
@@ -183,8 +199,8 @@ class Match_model extends CI_Model{
 			$teamIds = rtrim($teamIds, ',');
 			$this->db->join('teammatch', 'teammatch.idTeam in (' . $teamIds . ') AND teammatch.idMatch = match.idMatch');
 		}
-		
-		
+
+
 		//restrict by teams
 		if(isset($data['teams'])){
 			$teamIds = "";
@@ -193,24 +209,37 @@ class Match_model extends CI_Model{
 			}
 			$this->db->join('teammatch', 'teammatch.idTeam in (' . $teamIds . ') AND teammatch.idMatch = match.idMatch');
 		}
-		
-	
+
+		if(isset($data['idGame']) || isset($data['idSet'])){
+			$this->db->join('set', 'set.idMatch = match.idMatch');
+
+			if(isset($data['idSet'])){
+				$this->db->where('idSet', $data['idSet']);
+			}
+
+			if(isset($data['idGame'])){
+				$this->db->join('game', 'game.idSet = set.idSet');
+				$this->db->where('idGame', $data['idGame']);
+			}
+		}
+
+
 		// Add ranged where clauses to query (inclusive)
 		$qualificationRangeArray = array('scheduledDate', 'completedDate', 'numberOfGames', 'numberofSets');
 		foreach($qualificationRangeArray as $qualifier)
 		{
 			if(isset($data[$qualifier])){
-			$this->db->where($qualifier . ' >=',$data[$qualifier]['min'] );
-			$this->db->where($qualifier . ' <=',$data[$qualifier]['max'] );
+				$this->db->where($qualifier . ' >=',$data[$qualifier]['min'] );
+				$this->db->where($qualifier . ' <=',$data[$qualifier]['max'] );
 			}
 		}
-		
-		
+
+
 		//restrict by idRound
 		if(isset($data['idRound'])){
 			$this->db->join('roundmatch', 'roundmatch.idRound = ' . $data['idRoundMatch'] . ' AND match.idMatch = roundmatch.idMatch');
 		}
-		
+
 		//restrict by idTournament
 		if(isset($data['idTournament'])){
 			$this->load->model('Tournament_model');
@@ -219,7 +248,7 @@ class Match_model extends CI_Model{
 			foreach ($rounds as $round) {
 				$roundIds .= $round->idRound . ',';
 			}
-			$roundIds = rtrim($roundIds, ','); 
+			$roundIds = rtrim($roundIds, ',');
 			$this->db->join('roundmatch', 'roundmatch.idRound in (' . $roundIds . ') AND match.idMatch = roundmatch.idMatch');
 		}
 
@@ -289,7 +318,7 @@ class Match_model extends CI_Model{
 		return $new_match_id;
 	}
 
-	
+
 	/**
 	 * insert_set creates a set for the match specified by idMatch
 	 * @param int $idMatch
@@ -299,6 +328,23 @@ class Match_model extends CI_Model{
 		$this->db->set('idMatch', $idMatch);
 		$this->db->insert('set');
 		return $this->db->insert_id();
+	}
+	
+	function get_sets($idMatch){
+		$this->db->where('idMatch', $idMatch);
+		$query = $this->db->get('set');
+		if($query->row_count == 0) return false;
+		$results = $query->result();
+		$this->load->model('game_model');
+		$this->load->model('player_model');
+		foreach($results as $aSet){
+			$aSet->games = $this->Game_model->get_games(Array('idSet' => $aSet->idSet));
+			foreach($aSet->games as $aGame){
+				$tempArray = $this->Player_model->get_players(array('idPlayer' => $aGame->server));
+				$aGame->server = $tempArray[0];
+			}
+		}
+		return; 
 	}
 
 
@@ -374,7 +420,7 @@ class Match_model extends CI_Model{
 	 *
 	 * @param array $data
 	 */
-	/*@TODO: Finish Match_model->delete_match 
+	/*@TODO: Finish Match_model->delete_match
 	 function delete_match($data = array())
 	 {
 		// required values
