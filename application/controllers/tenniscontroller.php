@@ -58,7 +58,7 @@ class TennisController extends MainController {
 				$data['email'] = $_POST['email'];
 				$this->load->helper('Security');
 				$data['password'] = do_hash($_POST['password'], 'md5');
-				$data['idPlayerType'] = 4;
+				$data['idPlayerType'] = 1;
 
 				$playerId = array('idPlayer' => $this->Player_model->insert_player($data));
 				if($playerId['idPlayer']== False)
