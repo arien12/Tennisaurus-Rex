@@ -41,7 +41,7 @@ class Adhoc_Matches extends MainController {
     }
     
     private function view_match($idMatch) {
-    	$matches = $this->Match_model->get_matches(array('idMatch' => $idMatch));
+    	$matches = $this->Match_model->get_matches(array('matches' => array($idMatch)));
     	
     	$this->load->model('Team_model');
     	$teams = $this->Team_model->get_teams(array('idMatch' => $matches[0]->idMatch));
@@ -60,7 +60,7 @@ class Adhoc_Matches extends MainController {
     	$idMatch = $this->uri->segment(3);
     	
     	$this->load->model('Match_model');
-    	$matches = $this->Match_model->get_matches(array('idMatch' => $idMatch));
+    	$matches = $this->Match_model->get_matches(array('matches' => array($idMatch)));
     	
     	$this->load->model('Team_model');
     	$teams = $this->Team_model->get_teams(array('idMatch' => $idMatch));
