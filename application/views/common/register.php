@@ -1,7 +1,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#form").submit(function() {
-		var fname = $("#nname").val(); 
+	$("#registerForm").submit(function() {
+		var fname = $("#name").val(); 
 		var password = $("#password").val(); 
 		var passwordvalidation = $("#passwordvalidation").val(); 
 		var email = $("#email").val(); 
@@ -54,7 +54,10 @@ echo form_open('tenniscontroller/processregistration', $attributes);
 		<input type="email" id="email" name="email" />
     </li>
     <li id="send">
+    <!--  
     	<button type="submit" id="registerSubmit">Register</button>
+    	-->
+    	<input type="submit" value="Submit" />
     </li>
   </ol>
 
