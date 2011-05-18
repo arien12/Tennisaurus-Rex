@@ -289,6 +289,17 @@ class Match_model extends CI_Model{
 		return $new_match_id;
 	}
 
+	
+	/**
+	 * insert_set creates a set for the match specified by idMatch
+	 * @param int $idMatch
+	 * @return int id of the created set or false if failed
+	 */
+	function insert_set($idMatch){
+		$this->db->set('idMatch', $idMatch);
+		$this->db->insert('set');
+		return $this->db->insert_id();
+	}
 
 
 	/**
