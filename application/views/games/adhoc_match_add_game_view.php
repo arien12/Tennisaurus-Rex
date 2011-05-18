@@ -6,7 +6,7 @@
 	});
 </script>
 
-<?=form_open('adhoc_matches/add_game', array('class' => 'fstyle'));?>
+<?=form_open('adhoc_matches/add_game/'.$currSetId, array('class' => 'fstyle'));?>
 <p>Please enter information for the game:</p>
 <ol>
 	<li>

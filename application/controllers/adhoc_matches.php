@@ -67,7 +67,7 @@ class Adhoc_Matches extends MainController {
     	$teamIds = array($teams[0]->idTeam,$teams[1]->idTeam);
     	$players = $this->Player_model->get_players(array('idTeam' => $teamIds));
     	
-    	$data = array('match' => $matches[0], 'teams' => $teams, 'players' => $players);
+    	$data = array('currSetId' => '101', 'match' => $matches[0], 'teams' => $teams, 'players' => $players);
     	
     	$this->masterpage->addContentPage ( 'games/adhoc_match_add_game_view', 'content', $data );
 			
@@ -79,7 +79,7 @@ class Adhoc_Matches extends MainController {
     	$team1Score = $_POST['team1Score'];
 		$team2Score = $_POST['team2Score'];
 		$serverId = $_POST['server'];
-		$matchId = $_POST['matchId'];
+		$currSetId = $this->uri->segment(3);
 		$completedDate = $_POST['completedDate'];
 		
 		$this->load->model('Game_model');
