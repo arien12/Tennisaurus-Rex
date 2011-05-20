@@ -1,12 +1,14 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#registerForm").submit(function() {
+		alert("fuck");
 		var fname = $("#name").val(); 
 		var password = $("#password").val(); 
 		var passwordvalidation = $("#passwordvalidation").val(); 
 		var email = $("#email").val(); 
-		$.post("tenniscontroller/processregistration", { name:name, password:password, passwordvalidation:passwordvalidation, email:email },
+		$.post("<?php $this->load->helper('url');echo site_url('tenniscontroller/processregistration'); ?>", { name:name, password:password, passwordvalidation:passwordvalidation, email:email },
 		function(data){
+			alert(data);
 			$("#name_error").html(data.name);
 			$("#password_error").html(data.password);
 			$("#email_error").html(data.email);
