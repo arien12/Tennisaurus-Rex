@@ -81,36 +81,41 @@ class Adhoc_Matches extends MainController {
     	$matchId = $_POST['matchId'];
     	$team1Score = $_POST['team1Score'];
 		$team2Score = $_POST['team2Score'];
-		$server = $_POST('server');
+		$server = $_POST['server'];
 		$completedDate = $_POST['completedDate'];
 		
 		// First we check if we need to create a new set for the game being added.
 		$this->load->model('Match_model');
-		$matches = $this->Match_model->get_matches(array('idMatch' => $matchId));
+		$matches = $this->Match_model->get_match_details(array('matches' => array($matchId)));
 		$match = $matches[0];
 		
 		// Setup the current setId for where the game will be added.
-		//$currSetId = $this->Match_model->insert_set($matchId);
+		//TODO This should actually check for an active set
+		if (count($match->sets) == 0) {
+			$currSetId = $this->Match_model->insert_set($matchId);
+		}
+		else {
+			$currSetId = $match->sets[0]->idSet;
+		}
 		
 		// Add the new game to the current set.
 		$this->load->model('Game_model');
 		
 		// Set up team scores to be passed to insert_game method
-		$teams = array($match->teams[0]->idTeam => team1Score,
-					   $match->teams[0]->idTeam => team2Score );
+		$teams = array($match->teams[0]->idTeam => $team1Score,
+					   $match->teams[0]->idTeam => $team2Score );
 
 		// Set up game data to be passed to add insert_game method
 		$gamedata = array(
 			'idSet'=>$currSetId,
-			'idCourt'=>"101",
+			'idCourt'=>"1",
 			'server'=>$server,
 			'gameType' => GameType::MIN,
 			'teams' => $teams,
 			'completedDate'=> $completedDate
 		);
 		
-		$matchID = $this->Match_model->insert_match($matchdata);
-		
+		$matchID = $this->Game_model->insert_game($gamedata);
 		redirect('adhoc_matches');
     }
     

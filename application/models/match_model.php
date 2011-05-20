@@ -98,8 +98,8 @@ class Match_model extends CI_Model{
 			
 		if(!$toReturn) return false;
 			
-		$this->load->model('team_model');
-		$this->load->model('player_model');
+		$this->load->model('Team_model');
+		$this->load->model('Player_model');
 		//$this->load->model('tournament_model');
 		
 		foreach($toReturn as $aMatch){
@@ -333,15 +333,17 @@ class Match_model extends CI_Model{
 	function get_sets($idMatch){
 		$this->db->where('idMatch', $idMatch);
 		$query = $this->db->get('set');
-		if($query->row_count == 0) return false;
+		if($query->num_rows() == 0) return false;
 		$results = $query->result();
-		$this->load->model('game_model');
-		$this->load->model('player_model');
+		$this->load->model('Game_model');
+		$this->load->model('Player_model');
 		foreach($results as $aSet){
 			$aSet->games = $this->Game_model->get_games(Array('idSet' => $aSet->idSet));
-			foreach($aSet->games as $aGame){
-				$tempArray = $this->Player_model->get_players(array('idPlayer' => $aGame->server));
-				$aGame->server = $tempArray[0];
+			if ($aSet->games) {
+				foreach($aSet->games as $aGame){
+					$tempArray = $this->Player_model->get_players(array('idPlayer' => $aGame->server));
+					$aGame->server = $tempArray[0];
+				}
 			}
 		}
 		return; 
