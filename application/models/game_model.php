@@ -145,8 +145,8 @@ class Game_model extends CI_Model{
 		if($data['gameType'] != GameType::MIN && !isset($data['events'])) return false;
 
 		// default values
-		$data = $this->_default(array('completedDate' => time()), $data);
-		//$data['completedDate'] = date( 'Y-m-d H:i:s', $data['completedDate'] );
+		$data = $this->_default(array('completedDate' => date('y-m-d h:i:s')), $data);
+		$data['completedDate'] = convert_to_utc($data['completedDate']);
 
 		// qualification (make sure that we're not allowing the site to insert data that it shouldn't)
 		$qualificationArray = array('idSet', 'idCourt', 'server', 'completedDate');

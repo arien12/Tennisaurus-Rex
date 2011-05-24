@@ -108,7 +108,6 @@ class Adhoc_Matches extends MainController {
 					   $match->teams[1]->idTeam => $team2Score );
 
 		// Set up game data to be passed to add insert_game method
-		$completedDate = new DateTime($completedDate);
 		$gamedata = array(
 			'idSet'=>$currSetId,
 			'idCourt'=>"1",
