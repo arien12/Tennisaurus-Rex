@@ -29,6 +29,9 @@ class Game_model extends CI_Model{
 	 * --------------------------
 	 * idGame
 	 * server
+	 * teams (array of objects)
+	 * 	idTeam
+	 * 	points
 	 * idSet
 	 * idCourt
 	 * completedDate
@@ -102,8 +105,17 @@ class Game_model extends CI_Model{
 		$query = $this->db->get('game');
 		if($query->num_rows() == 0) return false;
 
+		$result = $query->result();
+		
+		foreach($result as $aGame){
+			$this->db->select('idTeam, points');
+			$this->db->where('idGame', $aGame->idGame);
+			$newQuery = $this->db->get('teamgame');
+			$aGame->teams = $newQuery->result(); 
+		}
+		
 		// returns an array of objects
-		return $query->result();
+		return $result;
 	}
 
 
