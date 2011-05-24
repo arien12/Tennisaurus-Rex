@@ -293,6 +293,9 @@ class Match_model extends CI_Model{
 
 		// default values
 		//$data = $this->_default(array('userStatus' => 'active'), $data);
+		if (isset($data["completedDate"])) {
+			$data["completedDate"] = convert_to_utc($data["completedDate"]);
+		}
 
 		// qualification (make sure that we're not allowing the site to insert data that it shouldn't)
 		$qualificationArray = array('numberOfSets', 'numberOfGames', 'completedDate', 'scheduledDate');

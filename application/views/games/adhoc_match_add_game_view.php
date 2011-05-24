@@ -30,7 +30,7 @@
 	</li>
 	<li>
 		<label for="complatedDate">Date Completed</label>
-		<input type="text" id="completedDate" name="completedDate" value="<?=date("m/d/y h:i a");?>"/>
+		<input type="text" id="completedDate" name="completedDate" value="<?=date("y-m-d h:i a");?>"/>
 	</li>
 	<li id="send">
 		<button type="submit">Add Game</button>

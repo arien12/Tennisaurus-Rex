@@ -105,9 +105,10 @@ class Adhoc_Matches extends MainController {
 		
 		// Set up team scores to be passed to insert_game method
 		$teams = array($match->teams[0]->idTeam => $team1Score,
-					   $match->teams[0]->idTeam => $team2Score );
+					   $match->teams[1]->idTeam => $team2Score );
 
 		// Set up game data to be passed to add insert_game method
+		$completedDate = new DateTime($completedDate);
 		$gamedata = array(
 			'idSet'=>$currSetId,
 			'idCourt'=>"1",
@@ -138,7 +139,11 @@ class Adhoc_Matches extends MainController {
       	
       	// Find out who the logged in player is
       	$currTeam = $this->Team_model->get_teams(array('idTeam' => parent::getCurrentUserId()));
-      	$currTeamId =  $currTeam[0]->idTeam;
+      	$currTeamId = '';
+      	if ($currTeam){
+      		$currTeamId = $currTeam[0]->idTeam;
+      	}
+      	
       	
       	// Set up info for view
 		$data = array('players' => $players, 
@@ -165,8 +170,8 @@ class Adhoc_Matches extends MainController {
 			'teams'=>array($teamOne,$teamTwo),
 			'numOfSets'=>$numOfSets,
 			'numOfGames'=>$numOfGames,
-			'completedDate'=>date("Y-m-d"),
-			'scheduledDate'=>date("Y-m-d")
+			'completedDate'=>date("y-m-d h:i a"),
+			'scheduledDate'=>date("y-m-d h:i a")
 		);
 		
 		$matchID = $this->Match_model->insert_match($matchdata);
