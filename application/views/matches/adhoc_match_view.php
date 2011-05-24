@@ -1,28 +1,30 @@
 <h1><?=$teams[0]->name?> VS <?=$teams[1]->name?></h1>
 
+
 <table class="matchTable">
 	<tr>
 		<th></th>
-		<th>S1</th>
-		<th>S2</th>
-		<th>S3</th>
+		<?php for ($i=1; $i <= count($match->sets); $i++): ?>
+			<th>S<?php echo $i ?></th>
+		<?php endfor; ?>
 		<th>Total</th>
 	</tr>
 	<tr>
 		<th><?=$teams[0]->name?></th>
-		<td>3</td>
-		<td>3</td>
-		<td>2</td>
-		<td class="total win">2</td>
+		<?php foreach($sets as $set): ?>
+			<td><?php echo $set[0] ?></td>
+		<?php endforeach; ?>
+		<td class="total win"><?php echo $total[0] ?></td>
 	</tr>
 	<tr>
 		<th><?=$teams[1]->name?></th>
-		<td>2</td>
-		<td>1</td>
-		<td>0</td>
-		<td class="total loser">0</td>
+		<?php foreach($sets as $set): ?>
+			<td><?php echo $set[1] ?></td>
+		<?php endforeach; ?>
+		<td class="total win"><?php echo $total[1] ?></td>
 	</tr>
 </table>
+
 
 <br/>
 <div>

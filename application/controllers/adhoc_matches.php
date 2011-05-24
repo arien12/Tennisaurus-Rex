@@ -41,12 +41,42 @@ class Adhoc_Matches extends MainController {
     }
     
     private function view_match($idMatch) {
-    	$matches = $this->Match_model->get_matches(array('matches' => array($idMatch)));
+    	$matches = $this->Match_model->get_match_details(array('matches' => array($idMatch)));
+    	$match = $matches[0];
     	
     	$this->load->model('Team_model');
     	$teams = $this->Team_model->get_teams(array('idMatch' => $matches[0]->idMatch));
     	
-    	$data = array('match' => $matches[0], 'teams' => $teams);
+    	// Make a summary of the games for the sets of this match
+    	$sets = array();
+    	$team1Total = 0;
+    	$team2Total = 0;
+    	foreach ($match->sets as $setDetail) {
+    		$team1Games = 0;
+    		$team2Games = 0;
+    		foreach ($setDetail->games as $game) {
+    			var_dump($game);
+    			if ($game->idServingTeam == $teams[0]->idTeam) {
+    				$isTeam1Serving = TRUE;
+    			}
+    			if (($game->pointsServingTeam > $games->pointsReceivingTeam) && $isTeam1Serving) {
+    				$team1Games++;
+    			}
+    			else {
+    				$team2Games++;
+    			}
+    		}
+    		array_push($sets, array($team1Games,$team2Games));
+    		if ($team1Games > $team2Games) {
+    			$team1Total++;
+    		}
+    		else {
+    			$team2Total++;
+    		}
+    	}
+    	$total = array($team1Total, $team2Total);
+    	
+    	$data = array('match' => $match, 'teams' => $teams, 'sets' => $sets, 'total' => $total);
     	
     	$this->masterpage->addContentPage ( 'matches/adhoc_match_view', 'content', $data );
 			
