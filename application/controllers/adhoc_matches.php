@@ -78,13 +78,15 @@ class Adhoc_Matches extends MainController {
     }
     
     public function add_game() {
+    	
+    	// Grab form values for adding a new game
     	$matchId = $_POST['matchId'];
     	$team1Score = $_POST['team1Score'];
 		$team2Score = $_POST['team2Score'];
 		$server = $_POST['server'];
 		$completedDate = $_POST['completedDate'];
 		
-		// First we check if we need to create a new set for the game being added.
+		// Grab the match details for the match we want to add a game for
 		$this->load->model('Match_model');
 		$matches = $this->Match_model->get_match_details(array('matches' => array($matchId)));
 		$match = $matches[0];
@@ -98,7 +100,7 @@ class Adhoc_Matches extends MainController {
 			$currSetId = $match->sets[0]->idSet;
 		}
 		
-		// Add the new game to the current set.
+		// Load the game model so we can add a game
 		$this->load->model('Game_model');
 		
 		// Set up team scores to be passed to insert_game method
@@ -115,8 +117,10 @@ class Adhoc_Matches extends MainController {
 			'completedDate'=> $completedDate
 		);
 		
+		// Add the new game to the current set.
 		$matchID = $this->Game_model->insert_game($gamedata);
-		redirect('adhoc_matches');
+		
+		redirect('adhoc_matches/'.$matchId);
     }
     
 	public function adhoc_match_insert_view ( ) {

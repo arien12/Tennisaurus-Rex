@@ -141,7 +141,7 @@ class Game_model extends CI_Model{
 		if(!$this->_required(array('idSet','idCourt','server','teams','gameType'), $data)) return false;
 
 		//requires 2 teams
-		if(!(count($data['teams']) == 2)) return false;
+		if(count($data['teams']) != 2) return false;
 		if($data['gameType'] != GameType::MIN && !isset($data['events'])) return false;
 
 		// default values
@@ -186,8 +186,8 @@ class Game_model extends CI_Model{
 		// Return the ID of the inserted row, or false if the row could not be inserted
 		return $new_game_id;
 	}
-
-
+	
+	
 
 	/**
 	 * update_game method alters a record in the users table.

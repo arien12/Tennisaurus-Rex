@@ -333,7 +333,7 @@ class Match_model extends CI_Model{
 	function get_sets($idMatch){
 		$this->db->where('idMatch', $idMatch);
 		$query = $this->db->get('set');
-		if($query->num_rows() == 0) return false;
+		if($query->num_rows() == 0) return Array();
 		$results = $query->result();
 		$this->load->model('Game_model');
 		$this->load->model('Player_model');
@@ -346,7 +346,7 @@ class Match_model extends CI_Model{
 				}
 			}
 		}
-		return; 
+		return $results; 
 	}
 
 
