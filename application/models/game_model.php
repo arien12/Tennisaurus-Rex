@@ -29,7 +29,7 @@ class Game_model extends CI_Model{
 	 * --------------------------
 	 * idGame
 	 * server
-	 * teams (array of objects)
+	 * points (array of objects)
 	 * 	idTeam
 	 * 	points
 	 * idSet
@@ -89,7 +89,7 @@ class Game_model extends CI_Model{
 		}
 
 		// Add where clauses to query
-		$qualificationArray = array('idSet', 'idCourt', 'isServer', 'gameType');
+		$qualificationArray = array('idSet', 'idCourt', 'server', 'gameType');
 		foreach($qualificationArray as $qualifier)
 		{
 			if(isset($data[$qualifier])) $this->db->where($qualifier, $data[$qualifier]);

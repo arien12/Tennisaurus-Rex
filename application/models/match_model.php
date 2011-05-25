@@ -75,16 +75,10 @@ class Match_model extends CI_Model{
 	 * 	completedDate
 	 * 	games (array of objects)
 	 * 		idGame
-	 * 		idServingTeam
-	 * 		idReceivingTeam
-	 * 		pointsServingTeam
-	 * 		pointsReceivingTeam
-	 * 		server (object)
-	 * 			idPlayer
-	 * 			name
-	 * 			email
-	 * 			password
-	 * 			idPlayerType
+	 * 		point (array of objects)
+	 * 			idTeam
+	 * 			points
+	 * 		server (id of player)
 	 *
 	 * @param array $data
 	 * @return array qualified match models
