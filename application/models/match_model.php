@@ -75,7 +75,7 @@ class Match_model extends CI_Model{
 	 * 	completedDate
 	 * 	games (array of objects)
 	 * 		idGame
-	 * 		point (array of objects)
+	 * 		points (array of objects)
 	 * 			idTeam
 	 * 			points
 	 * 		server (id of player)
@@ -325,6 +325,46 @@ class Match_model extends CI_Model{
 		$this->db->set('idMatch', $idMatch);
 		$this->db->insert('set');
 		return $this->db->insert_id();
+	}
+	
+	/**
+	 * update_set method alters a record in the set table.
+	 *
+	 * Option: Values
+	 * --------------
+	 * idSet		(required)
+	 * completedDate
+	 *
+	 * @param array $data
+	 * @return int affected_rows()
+	 */
+	function update_set($data = array()) {
+		// required values
+		if(!$this->_required(array('idSet'), $data)) return false;
+		
+		// default values
+		$data = $this->_default(array('completedDate' => date('y-m-d h:i:s')), $data);
+		if (isset($data['completedDate'])) {
+			$data['completedDate'] = convert_to_utc($data['completedDate']);
+		}
+
+		// qualification (make sure that we're not allowing the site to update data that it shouldn't)
+		$qualificationArray = array('completedDate');
+		foreach($qualificationArray as $qualifier)
+		{
+			if(isset($data[$qualifier])) $this->db->set($qualifier, $data[$qualifier]);
+		}
+
+		$this->db->where('idSet', $data['idSet']);
+
+		// Execute the query
+		$this->db->update('set');
+		$affectedCount = 0;
+		if($this->db->affected_rows() == false) return false;
+		$affectedCount += $this->db->affected_rows();
+
+		// Return the number of rows updated, or false if the row could not be inserted
+		return affectedCount;
 	}
 	
 	function get_sets($idMatch){
