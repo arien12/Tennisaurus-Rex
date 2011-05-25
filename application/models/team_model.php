@@ -38,7 +38,7 @@ class Team_model extends CI_Model{
 	function get_teams($data = array())
 	{
 		// default values
-		$data = $this->_default(array('sortDirection' => 'asc'), $data);
+		$data = $this->_default(array('sortDirection' => 'asc', 'sortBy' => 'name'), $data);
 
 
 		//join to PlayerTeam is idPlayer specified
