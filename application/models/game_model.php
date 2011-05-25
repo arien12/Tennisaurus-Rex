@@ -161,7 +161,7 @@ class Game_model extends CI_Model{
 		$data['completedDate'] = convert_to_utc($data['completedDate']);
 
 		// qualification (make sure that we're not allowing the site to insert data that it shouldn't)
-		$qualificationArray = array('idSet', 'idCourt', 'server', 'completedDate');
+		$qualificationArray = array('idSet', 'idCourt', 'server', 'completedDate', 'gameType');
 		foreach($qualificationArray as $qualifier)
 		{
 			if(isset($data[$qualifier])) $this->db->set($qualifier, $data[$qualifier]);
@@ -289,6 +289,44 @@ class Game_model extends CI_Model{
 		*/
 
 
+	/**
+	 * get_courts returns an array of court information
+	 * 
+	 * Returns (array of objects)
+	 * --------------------------
+	 * idCourt
+	 * name
+	 * description
+	 * alias 
+	 * 
+	 *  @param idCourt
+	 *  @return array of court objects or false if no results
+	 */
+	function get_courts($idCourt = -1){
+		if ($idCourt > -1) $this->db->where('idCourt', $idCourt);
+		$query = $this->db->get('court');
+		if($query->num_rows() == 0) return false;
+		return $query->result();
+	}
+	
+	function update_court($data = Array()){
+		// required values
+		if(!$this->_required(array('idCourt'), $data)) return false;
+
+		// qualification (make sure that we're not allowing the site to update data that it shouldn't)
+		$qualificationArray = array('name', 'description', 'alias');
+		foreach($qualificationArray as $qualifier)
+		{
+		if(isset($data[$qualifier])) $this->db->set($qualifier, $data[$qualifier]);
+		}
+
+		$this->db->where('idCourt', $data['idCourt']);
+
+		// Execute the query
+		$this->db->update('court');
+		return $this->db->affected_rows();		
+	}
+	
 	//utility methods
 
 	/**
