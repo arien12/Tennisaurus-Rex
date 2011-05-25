@@ -12,7 +12,10 @@ function attach_scoreWidget(index) {
 function down_click(evt) {
 	var scoreBox = $(evt.target).siblings(':text');
 	var previousVal = parseInt(scoreBox.val());
-	if (previousVal > 0) {
+	if (isNaN(previousVal)) {
+		scoreBox.val(0);
+	}
+	else if (previousVal > 0) {
 		scoreBox.val(previousVal - 1);
 	}
 }
@@ -20,7 +23,10 @@ function down_click(evt) {
 function up_click(evt) {
 	var scoreBox = $(evt.target).siblings(':text');
 	var previousVal = parseInt(scoreBox.val());
-	if (previousVal < 9999) {
+	if (isNaN(previousVal)) {
+		scoreBox.val(1);
+	}
+	else if (previousVal < 9999) {
 		scoreBox.val(previousVal + 1);
 	}
 }
