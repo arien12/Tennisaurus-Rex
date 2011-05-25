@@ -14,21 +14,24 @@
 		<?php foreach($sets as $set): ?>
 			<td><?php echo $set[0] ?></td>
 		<?php endforeach; ?>
-		<td class="total win"><?php echo $total[0] ?></td>
+		<td class="total <?php if (($isMatchCompleted) && ($winner->idTeam==$teams[0]->idTeam)):?>winner<?php elseif($isMatchCompleted):?>loser<?php endif?>"><?php echo $total[0] ?></td>
 	</tr>
 	<tr>
 		<th><?=$teams[1]->name?></th>
 		<?php foreach($sets as $set): ?>
 			<td><?php echo $set[1] ?></td>
 		<?php endforeach; ?>
-		<td class="total win"><?php echo $total[1] ?></td>
+		<td class="total <?php if (($isMatchCompleted) && ($winner->idTeam==$teams[1]->idTeam)):?>winner<?php elseif($isMatchCompleted):?>loser<?php endif?>"><?php echo $total[1] ?></td>
 	</tr>
 </table>
 
 
 <br/>
 <div>
+
+<?php if (!$isMatchCompleted):?>
 <p><?=anchor("adhoc_matches/add_game_view/".$match->idMatch, "Add New Game")?></p>
+<?php endif ?>
 
 <p><?=anchor("adhoc_matches", "Back to Adhoc Match List")?></p>
 </div>

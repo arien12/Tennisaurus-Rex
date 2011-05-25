@@ -67,7 +67,24 @@ class Adhoc_Matches extends MainController {
     	}
     	$total = array($team1Total, $team2Total);
     	
-    	$data = array('match' => $match, 'teams' => $teams, 'sets' => $sets, 'total' => $total);
+    	// Check if the match is completed
+    	$isMatchCompleted = false;
+    	$winner = NULL;
+    	if ($team1Total == $match->numberOfSets) {
+    		$isMatchCompleted = true;
+    		$winner = $teams[0];
+    	}
+   		 if ($team2Total == $match->numberOfSets) {
+    		$isMatchCompleted = true;
+    		$winner = $teams[1];
+    	}
+    	
+    	$data = array('match' => $match, 
+    				  'teams' => $teams, 
+    				  'sets' => $sets, 
+    				  'total' => $total,
+    				  'isMatchCompleted' => $isMatchCompleted,
+    				  'winner' => $winner);
     	
     	$this->masterpage->addContentPage ( 'matches/adhoc_match_view', 'content', $data );
 			
@@ -85,7 +102,7 @@ class Adhoc_Matches extends MainController {
      */
     private function get_set_score($set, $teams) {
 		
-		if (count($set->games) < 1) return false;
+		if (!$set->games) return false;
 		
 		$team1Games = 0;
 		$team2Games = 0;
