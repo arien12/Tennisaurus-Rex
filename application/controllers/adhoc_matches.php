@@ -51,37 +51,87 @@ class Adhoc_Matches extends MainController {
     	$sets = array();
     	$team1Total = 0;
     	$team2Total = 0;
-    	foreach ($match->sets as $setDetail) {
-    		$team1Games = 0;
-    		$team2Games = 0;
-    		foreach ($setDetail->games as $game) {
-    			var_dump($game);
-    			if ($game->idServingTeam == $teams[0]->idTeam) {
-    				$isTeam1Serving = TRUE;
-    			}
-    			if (($game->pointsServingTeam > $games->pointsReceivingTeam) && $isTeam1Serving) {
-    				$team1Games++;
-    			}
-    			else {
-    				$team2Games++;
-    			}
-    		}
-    		array_push($sets, array($team1Games,$team2Games));
-    		if ($team1Games > $team2Games) {
-    			$team1Total++;
-    		}
-    		else {
-    			$team2Total++;
+    	foreach ($match->sets as $set) {
+    		$set_score = $this->get_set_score($set, $teams);
+    		if ($set_score) {
+				array_push($sets, $set_score);
+				if ($this->is_set_complete($set_score, $match->numberOfGames)) {
+					if ($set_score[0] > $set_score[1]) {
+	    				$team1Total++;
+	    			}
+		    		else {
+		    			$team2Total++;
+		    		}
+				}
     		}
     	}
     	$total = array($team1Total, $team2Total);
     	
-    	$data = array('match' => $match, 'teams' => $teams, 'sets' => $sets, 'total' => $total);
+    	// Check if the match is completed
+    	$isMatchCompleted = false;
+    	$winner = NULL;
+    	if ($team1Total == $match->numberOfSets) {
+    		$isMatchCompleted = true;
+    		$winner = $teams[0];
+    	}
+   		 if ($team2Total == $match->numberOfSets) {
+    		$isMatchCompleted = true;
+    		$winner = $teams[1];
+    	}
+    	
+    	$data = array('match' => $match, 
+    				  'teams' => $teams, 
+    				  'sets' => $sets, 
+    				  'total' => $total,
+    				  'isMatchCompleted' => $isMatchCompleted,
+    				  'winner' => $winner);
     	
     	$this->masterpage->addContentPage ( 'matches/adhoc_match_view', 'content', $data );
 			
 	    // Show the masterpage to the world!
 	    $this->masterpage->show ( );
+    }
+    
+    /*
+     * Gets the team scores for a set.
+     * 
+     * Returns
+     * scores (array)
+     *   idTeam
+     *   points
+     */
+    private function get_set_score($set, $teams) {
+		
+		if (!$set->games) return false;
+		
+		$team1Games = 0;
+		$team2Games = 0;
+		foreach ($set->games as $game) {
+			if ($game->points[0]->points > $game->points[1]->points) {
+				if ($game->points[0]->idTeam == $teams[0]->idTeam) {
+					$team1Games++;
+				}
+				else {
+					$team2Games++;	
+				}
+			}
+			else {
+				if ($game->points[1]->idTeam == $teams[1]->idTeam) {
+					$team2Games++;	
+				}
+				else {
+					$team1Games++;	
+				}
+			}
+		}
+		return array($team1Games,$team2Games);
+    }
+    
+	private function is_set_complete($score, $numOfGames) {
+		if (($score[0] == $numOfGames) || ($score[1] == $numOfGames)) {
+			return true;
+		}
+		return false;
     }
     
     public function add_game_view() {
@@ -122,12 +172,15 @@ class Adhoc_Matches extends MainController {
 		$match = $matches[0];
 		
 		// Setup the current setId for where the game will be added.
-		//TODO This should actually check for an active set
-		if (count($match->sets) == 0) {
-			$currSetId = $this->Match_model->insert_set($matchId);
+		$currSetId = -1;
+		foreach ($match->sets as $set) {
+			$set_score = $this->get_set_score($set, $match->teams);
+			if (!$this->is_set_complete($set_score, $match->numberOfGames)) {
+				$currSetId = $set->idSet;
+			}
 		}
-		else {
-			$currSetId = $match->sets[0]->idSet;
+		if ($currSetId < 0) {
+			$currSetId = $this->Match_model->insert_set($matchId);
 		}
 		
 		// Load the game model so we can add a game
@@ -149,6 +202,10 @@ class Adhoc_Matches extends MainController {
 		
 		// Add the new game to the current set.
 		$matchID = $this->Game_model->insert_game($gamedata);
+		
+		// If adding this game completes the set we can make the set completed
+		if ($match->numberOfGames)
+		
 		
 		redirect('adhoc_matches/'.$matchId);
     }
@@ -197,8 +254,8 @@ class Adhoc_Matches extends MainController {
 		
 		$matchdata = array(
 			'teams'=>array($teamOne,$teamTwo),
-			'numOfSets'=>$numOfSets,
-			'numOfGames'=>$numOfGames,
+			'numberOfSets'=>$numOfSets,
+			'numberOfGames'=>$numOfGames,
 			'completedDate'=>date("y-m-d h:i a"),
 			'scheduledDate'=>date("y-m-d h:i a")
 		);

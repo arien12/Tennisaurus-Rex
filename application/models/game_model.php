@@ -111,7 +111,7 @@ class Game_model extends CI_Model{
 			$this->db->select('idTeam, points');
 			$this->db->where('idGame', $aGame->idGame);
 			$newQuery = $this->db->get('teamgame');
-			$aGame->teams = $newQuery->result(); 
+			$aGame->points = $newQuery->result(); 
 		}
 		
 		// returns an array of objects
