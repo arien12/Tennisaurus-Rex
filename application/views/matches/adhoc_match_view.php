@@ -1,5 +1,6 @@
 <h1><?=$teams[0]->name?> VS <?=$teams[1]->name?></h1>
 
+<p>First to <?php echo $match->numberOfGames?> games. First to <?php echo $match->numberOfSets?> sets.</p>
 
 <table class="matchTable">
 	<tr>
