@@ -226,6 +226,10 @@ form.fstyle textarea {
 	width:300px;
 }
 
+form.fstyle input.numTxt {
+	width: 50px;	
+}
+
 form.fstyle select {
 	padding:4px;
 	font:13px Georgia, "Times New Roman", Times, serif;
@@ -256,6 +260,10 @@ form.fstyle li#send button {
 			
 form.fstyle li#send button:hover { 
 	background-color:#006633;
+}
+
+img.updownbuttons {
+	vertical-align: middle;
 }
 
 /* jqueryui stuff */
