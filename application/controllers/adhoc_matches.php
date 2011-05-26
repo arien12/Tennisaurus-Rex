@@ -149,7 +149,7 @@ class Adhoc_Matches extends MainController {
     	$teamIds = array($teams[0]->idTeam,$teams[1]->idTeam);
     	$players = $this->Player_model->get_players(array('idTeam' => $teamIds));
     	
-    	$data = array('currSetId' => '101', 'match' => $matches[0], 'teams' => $teams, 'players' => $players);
+    	$data = array('match' => $matches[0], 'teams' => $teams, 'players' => $players);
     	
     	$this->masterpage->addContentPage ( 'games/adhoc_match_add_game_view', 'content', $data );
 			
@@ -263,6 +263,51 @@ class Adhoc_Matches extends MainController {
 		$matchID = $this->Match_model->insert_match($matchdata);
 		
 		redirect('adhoc_matches');
+	}
+	
+	public function sets() {
+		parent::setupMaster();
+		
+		$idSet = $this->uri->segment(3);
+		
+		// Get the match for the set we are looking at
+		$this->load->model('Match_model');
+		$matches = $this->Match_model->get_match_details(array('idSet' => $idSet));
+		$match = $matches[0];
+		
+		$teams = $match->teams;
+		$game_scores = array();
+		$setCount = 0;
+		foreach ($match->sets as $set) {
+			$setCount++;
+			if ($set->idSet == $idSet) {
+				foreach ($set->games as $game) {
+					$team1Score = 0;
+					$team2Score = 0;
+					if ($game->points[0]->idTeam == $teams[0]->idTeam) {
+						$team1Score = $game->points[0]->points;
+						$team2Score = $game->points[1]->points;
+					}
+					else {
+						$team1Score = $game->points[1]->points;
+						$team2Score = $game->points[0]->points;
+					}
+					array_push($game_scores, array($team1Score, $team2Score));
+				}
+				break;
+			}
+		}
+		
+		// Set up info for view
+		$data = array('match' => $match, 
+					  'teams' => $match->teams,
+					  'setCount' => $setCount,
+					  'game_scores' => $game_scores);
+		
+		$this->masterpage->addContentPage ( 'sets/adhoc_set_view', 'content', $data );
+		
+		// Show the masterpage to the world!
+        $this->masterpage->show();
 	}
 }
 ?>
