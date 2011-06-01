@@ -268,19 +268,22 @@ class Adhoc_Matches extends MainController {
 	public function sets() {
 		parent::setupMaster();
 		
-		$idSet = $this->uri->segment(3);
+		$idMatch = $this->uri->segment(3);
+		$idSet = $this->uri->segment(4);
 		
 		// Get the match for the set we are looking at
 		$this->load->model('Match_model');
-		$matches = $this->Match_model->get_match_details(array('idSet' => $idSet));
+		$matches = $this->Match_model->get_match_details(array('matches' => array($idMatch)));
 		$match = $matches[0];
 		
 		$teams = $match->teams;
-		$game_scores = array();
+		$sets = array();
 		$setCount = 0;
 		foreach ($match->sets as $set) {
 			$setCount++;
-			if ($set->idSet == $idSet) {
+			$currSet = NULL;
+			if (!$idSet || ($idSet && ($set->idSet == $idSet))) {
+				$game_scores = array();
 				foreach ($set->games as $game) {
 					$team1Score = 0;
 					$team2Score = 0;
@@ -294,15 +297,22 @@ class Adhoc_Matches extends MainController {
 					}
 					array_push($game_scores, array($team1Score, $team2Score));
 				}
-				break;
+				$currSet->idSet = $idSet;
+				$currSet->games = $game_scores;
+				$currSet->setNum = $setCount;
+				
+				array_push($sets, $currSet);
+				
+				if ($idSet && ($set->idSet == $idSet)) {
+					break;
+				}
 			}
 		}
 		
 		// Set up info for view
 		$data = array('match' => $match, 
 					  'teams' => $match->teams,
-					  'setCount' => $setCount,
-					  'game_scores' => $game_scores);
+					  'sets' => $sets);
 		
 		$this->masterpage->addContentPage ( 'sets/adhoc_set_view', 'content', $data );
 		
