@@ -306,11 +306,11 @@ img.updownbuttons {
 	padding: 5px;
 }
 
-.matchTable .winner {
+.winner {
 	color: #00CC00;
 }
 
-.matchTable .loser {
+.loser {
 	color: #FF3300;
 }
 

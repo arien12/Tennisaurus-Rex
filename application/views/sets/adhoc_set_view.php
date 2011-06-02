@@ -13,8 +13,17 @@
 	<?php for ($i=0; $i < count($set->games); $i++): ?>
 	<tr>
 		<th>Game <?php echo $i+1; ?></th>
-		<td><?php echo $set->games[$i][0]; ?></td>
-		<td><?php echo $set->games[$i][1]; ?></td>
+		<?php 
+		if (intval($set->games[$i][0]) > intval($set->games[$i][1])): 
+ 			$team1Status = "winner"; 
+ 			$team2Status = "loser"; 
+ 		else:
+			$team2Status = "winner"; 
+ 			$team1Status = "loser"; 
+		endif 
+		?>
+		<td class="<?php echo $team1Status ?>"><?php echo $set->games[$i][0]; ?></td>
+		<td class="<?php echo $team2Status ?>"><?php echo $set->games[$i][1]; ?></td>
 	</tr>
 	<?php endfor; ?>
 </table>
