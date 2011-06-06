@@ -8,12 +8,13 @@
 google.load('visualization', '1', {'packages':['corechart']});
       
 // Set a callback to run when the Google Visualization API is loaded.
-google.setOnLoadCallback(drawChart);
+google.setOnLoadCallback(drawGameChart);
+google.setOnLoadCallback(drawMatchChart);
       
 // Callback that creates and populates a data table, 
 // instantiates the pie chart, passes in the data and
 // draws it.
-function drawChart() {
+function drawGameChart() {
 
 	// Create our data table.
 	var data = new google.visualization.DataTable();
@@ -25,10 +26,35 @@ function drawChart() {
 	]);
 
 	// Instantiate and draw our chart, passing in some options.
-	var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+	var chart = new google.visualization.PieChart(document.getElementById('game_chart_div'));
+	chart.draw(data, {width: 400, height: 240});
+}
+
+//Callback that creates and populates a data table, 
+//instantiates the pie chart, passes in the data and
+//draws it.
+function drawMatchChart() {
+
+	// Create our data table.
+	var data = new google.visualization.DataTable();
+	data.addColumn('string', 'Topping');
+	data.addColumn('number', 'Slices');
+	data.addRows([
+		['Matches Won', <?php echo $matchesWon ?>],
+		['Matches Lost', <?php echo $matchesLost ?>],
+		['Matches Ongoing', <?php echo $matchesIncomplete ?>]
+	]);
+
+	// Instantiate and draw our chart, passing in some options.
+	var chart = new google.visualization.PieChart(document.getElementById('match_chart_div'));
 	chart.draw(data, {width: 400, height: 240});
 }
 </script>
 
-<div id="chart_div"></div>
+<h2>Match Stats</h2>
+<div id="match_chart_div"></div>
+
+<h2>Game Stats</h2>
+<div id="game_chart_div"></div>
+
 

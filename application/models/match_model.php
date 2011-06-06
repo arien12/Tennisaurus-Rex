@@ -197,11 +197,8 @@ class Match_model extends CI_Model{
 
 		//restrict by teams
 		if(isset($data['teams'])){
-			$teamIds = "";
-			foreach ($data['teams'] as $idTeam) {
-				$teamIds .= $idTeam . ',';
-			}
-			$this->db->join('teammatch', 'teammatch.idTeam in (' . $teamIds . ') AND teammatch.idMatch = match.idMatch');
+			$this->db->join('teammatch', 'teammatch.idMatch = match.idMatch');
+			$this->db->where_in('teammatch.idTeam', $data['teams']);
 		}
 
 		if(isset($data['idGame']) || isset($data['idSet'])){
