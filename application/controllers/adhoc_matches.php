@@ -151,7 +151,6 @@ class Adhoc_Matches extends MainController {
     	$team1Score = 0;
 		$team2Score = 0;
 		if ($game){
-			var_dump($game);
 			if ($teams[0]->idTeam == $game->points[0]->idTeam){
 				$team1Score = $game->points[0]->points;
 				$team2Score = $game->points[1]->points;
@@ -170,10 +169,10 @@ class Adhoc_Matches extends MainController {
     	$teamIds = array($teams[0]->idTeam,$teams[1]->idTeam);
     	$players = $this->Player_model->get_players(array('idTeam' => $teamIds));
     	
-    	$data = array('idMatch' => $matches[0]->idMatch, 
+    	$data = array('idMatch' => $idMatch, 
     				  'teams' => $teams, 
     				  'players' => $players,
-    				  'game' => game);
+    				  'game' => $game);
     	
     	$this->masterpage->addContentPage ( 'games/adhoc_match_add_game_view', 'content', $data );
 			

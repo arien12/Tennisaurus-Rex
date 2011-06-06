@@ -49,12 +49,6 @@ class Game_model extends CI_Model{
 		//select one game by it's id
 		if(isset($data['idGame'])){
 			$this->db->where('idGame', $data['idGame']);
-			$query = $this->db->get('game');
-			if($query->num_rows() == 0) return false;
-
-			// returns an array of objects
-			return $query->result();
-
 		}
 
 		//restrict by teams can also be "single teams"
