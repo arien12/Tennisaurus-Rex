@@ -64,7 +64,8 @@ class Game_model extends CI_Model{
 				$this->db->join('teamgame', 'teamgame.idGame = game.idGame AND teamgame.idGame in ('.$TeamOneGameIds.') AND idTeam = ' . $data['teams'][1]);
 			}
 			elseif(count($data['teams']) == 1){
-				$this->db->join('teamgame', 'teamgame.idGame = game.idGame AND idTeam = ' . $data['teams'][0]);
+				$this->db->join('teamgame', 'teamgame.idGame = game.idGame');
+				$this->db->where('teamgame.idTeam', $data['teams'][0]);
 			}
 		}
 

@@ -13,7 +13,7 @@
 <li>Players</li>
 <ul>
 <li><?=anchor('player/playerlist', 'List Players')?></li>
-<li>Plater Stats</li>
+<li><?=anchor('player_stats', 'Player Stats')?></li>
 </ul>
 <li>Teams</li>
 <ul>

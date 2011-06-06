@@ -39,8 +39,7 @@ class Team_model extends CI_Model{
 	{
 		// default values
 		$data = $this->_default(array('sortDirection' => 'asc', 'sortBy' => 'name'), $data);
-
-
+		
 		//join to PlayerTeam is idPlayer specified
 		//TODO change tema_model->get_teams use an array of player ids
 		if(isset($data['players'])){
@@ -52,10 +51,11 @@ class Team_model extends CI_Model{
 					$playerOneTeamIds .= $pt->idTeam . ',';
 				}
 				$playerOneTeamIds = rtrim($playerOneTeamIds, ',');
-				$this->db->join('playerteam', 'idPlayer = ' . $data['players'][1] . ' AND playerteam.idTeam in ('.$playerOneTeamIds.') AND playerteam.idTeam = team.idTeam');
+				$this->db->join('playerteam', 'playerteam.idPlayer = ' . $data['players'][1] . ' AND playerteam.idTeam in ('.$playerOneTeamIds.') AND playerteam.idTeam = team.idTeam');
 			}
 			elseif(count($data['players']) == 1){
-				$this->db->join('playerteam', 'idPlayer = ' . $data['players'][0] . ' AND playerteam.idTeam = team.idTeam');
+				$this->db->join('playerteam', 'playerteam.idTeam = team.idTeam');
+				$this->db->where('playerteam.idPlayer', $data['players'][0]);
 			}
 		}
 		

@@ -275,7 +275,7 @@ class Adhoc_Matches extends MainController {
       	$teams = $this->Team_model->get_teams($teamsWhere);
       	
       	// Find out who the logged in player is
-      	$currTeam = $this->Team_model->get_teams(array('idTeam' => parent::getCurrentUserId()));
+      	$currTeam = $this->Team_model->get_teams(array('idPlayer' => array(parent::getCurrentPlayerId())));
       	$currTeamId = '';
       	if ($currTeam){
       		$currTeamId = $currTeam[0]->idTeam;

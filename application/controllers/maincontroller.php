@@ -43,7 +43,7 @@ class MainController extends CI_Controller {
 		$this->session->set_userdata($userdata);
 		}
 		
-		protected function getCurrentUserId() {
+		protected function getCurrentPlayerId() {
 			return $this->session->userdata('idPlayer');
 		}
 		
