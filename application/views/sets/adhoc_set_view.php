@@ -12,9 +12,9 @@
 	</tr>
 	<?php for ($i=0; $i < count($set->games); $i++): ?>
 	<tr>
-		<th>Game <?php echo $i+1; ?></th>
+		<th><?=anchor("adhoc_matches/edit_game_view/".$match->idMatch."/".$set->games[$i]->idGame, "Game ".($i+1)) ?></th>
 		<?php 
-		if (intval($set->games[$i][0]) > intval($set->games[$i][1])): 
+		if (intval($set->games[$i]->scores[0]) > intval($set->games[$i]->scores[1])): 
  			$team1Status = "winner"; 
  			$team2Status = "loser"; 
  		else:
@@ -22,8 +22,8 @@
  			$team1Status = "loser"; 
 		endif 
 		?>
-		<td class="<?php echo $team1Status ?>"><?php echo $set->games[$i][0]; ?></td>
-		<td class="<?php echo $team2Status ?>"><?php echo $set->games[$i][1]; ?></td>
+		<td class="<?php echo $team1Status ?>"><?php echo $set->games[$i]->scores[0]; ?></td>
+		<td class="<?php echo $team2Status ?>"><?php echo $set->games[$i]->scores[1]; ?></td>
 	</tr>
 	<?php endfor; ?>
 </table>
@@ -33,5 +33,5 @@
 <br/>
 
 <div>
-<p><?=anchor("adhoc_matches/".$match->idMatch, "Back to View Match")?></p>
+<p><?=anchor("adhoc_matches/".$match->idMatch, "Back to View Match") ?></p>
 </div>

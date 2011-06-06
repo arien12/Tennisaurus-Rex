@@ -134,6 +134,53 @@ class Adhoc_Matches extends MainController {
 		return false;
     }
     
+    public function edit_game_view() {
+    	parent::setupMaster();
+    	
+    	$idMatch = $this->uri->segment(3);
+    	$idGame = $this->uri->segment(4);
+    	
+    	$this->load->model('Game_model');
+    	$games = $this->Game_model->get_games(array('idGame' => $idGame));
+    	$game = $games[0];
+    	
+    	$this->load->model('Team_model');
+    	$teams = $this->Team_model->get_teams(array('idMatch' => $idMatch));
+    	
+    	//Modify game to simply have scores for team1 and team2 in the order we want them
+    	$team1Score = 0;
+		$team2Score = 0;
+		if ($game){
+			var_dump($game);
+			if ($teams[0]->idTeam == $game->points[0]->idTeam){
+				$team1Score = $game->points[0]->points;
+				$team2Score = $game->points[1]->points;
+			}
+			else {
+				$team1Score = $game->points[1]->points;
+				$team2Score = $game->points[0]->points;
+			}
+		}
+		$game->points = array($team1Score, $team2Score);
+    	
+    	$this->load->model('Team_model');
+    	$teams = $this->Team_model->get_teams(array('idMatch' => $idMatch));
+    	
+    	$this->load->model('Player_model');
+    	$teamIds = array($teams[0]->idTeam,$teams[1]->idTeam);
+    	$players = $this->Player_model->get_players(array('idTeam' => $teamIds));
+    	
+    	$data = array('idMatch' => $matches[0]->idMatch, 
+    				  'teams' => $teams, 
+    				  'players' => $players,
+    				  'game' => game);
+    	
+    	$this->masterpage->addContentPage ( 'games/adhoc_match_add_game_view', 'content', $data );
+			
+	    // Show the masterpage to the world!
+	    $this->masterpage->show ( );
+    }
+    
     public function add_game_view() {
     	parent::setupMaster();
     	
@@ -149,7 +196,10 @@ class Adhoc_Matches extends MainController {
     	$teamIds = array($teams[0]->idTeam,$teams[1]->idTeam);
     	$players = $this->Player_model->get_players(array('idTeam' => $teamIds));
     	
-    	$data = array('match' => $matches[0], 'teams' => $teams, 'players' => $players);
+    	$data = array('idMatch' => $matches[0]->idMatch, 
+    				  'teams' => $teams, 
+    				  'players' => $players,
+    				  'game' => false);
     	
     	$this->masterpage->addContentPage ( 'games/adhoc_match_add_game_view', 'content', $data );
 			
@@ -295,7 +345,10 @@ class Adhoc_Matches extends MainController {
 						$team1Score = $game->points[1]->points;
 						$team2Score = $game->points[0]->points;
 					}
-					array_push($game_scores, array($team1Score, $team2Score));
+					
+					$myGame->idGame = $game->idGame;
+					$myGame->scores = array($team1Score, $team2Score);
+					array_push($game_scores, $myGame);
 				}
 				$currSet->idSet = $idSet;
 				$currSet->games = $game_scores;
