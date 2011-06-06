@@ -134,6 +134,54 @@ class Adhoc_Matches extends MainController {
 		return false;
     }
     
+    public function edit_game_view() {
+    	parent::setupMaster();
+    	
+    	$idMatch = $this->uri->segment(3);
+    	$idGame = $this->uri->segment(4);
+    	$idSet = $this->uri->segment(5);
+    	
+    	$this->load->model('Game_model');
+    	$games = $this->Game_model->get_games(array('idGame' => $idGame));
+    	$game = $games[0];
+    	
+    	$this->load->model('Team_model');
+    	$teams = $this->Team_model->get_teams(array('idMatch' => $idMatch));
+    	
+    	//Modify game to simply have scores for team1 and team2 in the order we want them
+    	$team1Score = 0;
+		$team2Score = 0;
+		if ($game){
+			if ($teams[0]->idTeam == $game->points[0]->idTeam){
+				$team1Score = $game->points[0]->points;
+				$team2Score = $game->points[1]->points;
+			}
+			else {
+				$team1Score = $game->points[1]->points;
+				$team2Score = $game->points[0]->points;
+			}
+		}
+		$game->points = array($team1Score, $team2Score);
+    	
+    	$this->load->model('Team_model');
+    	$teams = $this->Team_model->get_teams(array('idMatch' => $idMatch));
+    	
+    	$this->load->model('Player_model');
+    	$teamIds = array($teams[0]->idTeam,$teams[1]->idTeam);
+    	$players = $this->Player_model->get_players(array('idTeam' => $teamIds));
+    	
+    	$data = array('idMatch' => $idMatch, 
+    				  'idSet' => $idSet,
+    				  'teams' => $teams, 
+    				  'players' => $players,
+    				  'game' => $game);
+    	
+    	$this->masterpage->addContentPage ( 'games/adhoc_match_add_game_view', 'content', $data );
+			
+	    // Show the masterpage to the world!
+	    $this->masterpage->show ( );
+    }
+    
     public function add_game_view() {
     	parent::setupMaster();
     	
@@ -149,7 +197,10 @@ class Adhoc_Matches extends MainController {
     	$teamIds = array($teams[0]->idTeam,$teams[1]->idTeam);
     	$players = $this->Player_model->get_players(array('idTeam' => $teamIds));
     	
-    	$data = array('currSetId' => '101', 'match' => $matches[0], 'teams' => $teams, 'players' => $players);
+    	$data = array('idMatch' => $matches[0]->idMatch, 
+    				  'teams' => $teams, 
+    				  'players' => $players,
+    				  'game' => false);
     	
     	$this->masterpage->addContentPage ( 'games/adhoc_match_add_game_view', 'content', $data );
 			
@@ -263,6 +314,64 @@ class Adhoc_Matches extends MainController {
 		$matchID = $this->Match_model->insert_match($matchdata);
 		
 		redirect('adhoc_matches');
+	}
+	
+	public function sets() {
+		parent::setupMaster();
+		
+		$idMatch = $this->uri->segment(3);
+		$idSet = $this->uri->segment(4);
+		
+		// Get the match for the set we are looking at
+		$this->load->model('Match_model');
+		$matches = $this->Match_model->get_match_details(array('matches' => array($idMatch)));
+		$match = $matches[0];
+		
+		$teams = $match->teams;
+		$sets = array();
+		$setCount = 0;
+		foreach ($match->sets as $set) {
+			$setCount++;
+			$currSet = NULL;
+			if (!$idSet || ($idSet && ($set->idSet == $idSet))) {
+				$game_scores = array();
+				foreach ($set->games as $game) {
+					$team1Score = 0;
+					$team2Score = 0;
+					if ($game->points[0]->idTeam == $teams[0]->idTeam) {
+						$team1Score = $game->points[0]->points;
+						$team2Score = $game->points[1]->points;
+					}
+					else {
+						$team1Score = $game->points[1]->points;
+						$team2Score = $game->points[0]->points;
+					}
+					
+					$myGame->idGame = $game->idGame;
+					$myGame->scores = array($team1Score, $team2Score);
+					array_push($game_scores, $myGame);
+				}
+				$currSet->idSet = $idSet;
+				$currSet->games = $game_scores;
+				$currSet->setNum = $setCount;
+				
+				array_push($sets, $currSet);
+				
+				if ($idSet && ($set->idSet == $idSet)) {
+					break;
+				}
+			}
+		}
+		
+		// Set up info for view
+		$data = array('match' => $match, 
+					  'teams' => $match->teams,
+					  'sets' => $sets);
+		
+		$this->masterpage->addContentPage ( 'sets/adhoc_set_view', 'content', $data );
+		
+		// Show the masterpage to the world!
+        $this->masterpage->show();
 	}
 }
 ?>

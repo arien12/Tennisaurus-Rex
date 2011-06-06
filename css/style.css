@@ -306,12 +306,29 @@ img.updownbuttons {
 	padding: 5px;
 }
 
-.matchTable .winner {
+.winner {
 	color: #00CC00;
 }
 
-.matchTable .loser {
+.loser {
 	color: #FF3300;
+}
+
+/* Set table styles */
+.setTable th {
+	padding: 5px;
+	font:22px Georgia, "Times New Roman", Times, serif;	
+}
+
+.setTable td {
+	text-align: center;
+	background:#e3f1f1;
+	padding: 12px 18px 12px 18px;
+	font:17px Georgia, "Times New Roman", Times, serif;	
+}
+
+.setHeader {
+	text-align: center;
 }
 
 /* css for timepicker */

@@ -6,9 +6,9 @@
 	<tr>
 		<th></th>
 		<?php for ($i=1; $i <= count($match->sets); $i++): ?>
-			<th>S<?php echo $i ?></th>
+			<th><?=anchor("adhoc_matches/sets/".$match->idMatch."/".$match->sets[$i-1]->idSet, "S".$i) ?></th>
 		<?php endfor; ?>
-		<th>Total</th>
+		<th><?=anchor("adhoc_matches/sets/".$match->idMatch, 'Total') ?></th>
 	</tr>
 	<tr>
 		<th><?=$teams[0]->name?></th>
