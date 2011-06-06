@@ -106,14 +106,14 @@ class Game_model extends CI_Model{
 		if($query->num_rows() == 0) return false;
 
 		$result = $query->result();
-		
+
 		foreach($result as $aGame){
 			$this->db->select('idTeam, points');
 			$this->db->where('idGame', $aGame->idGame);
 			$newQuery = $this->db->get('teamgame');
-			$aGame->points = $newQuery->result(); 
+			$aGame->points = $newQuery->result();
 		}
-		
+
 		// returns an array of objects
 		return $result;
 	}
@@ -198,8 +198,8 @@ class Game_model extends CI_Model{
 		// Return the ID of the inserted row, or false if the row could not be inserted
 		return $new_game_id;
 	}
-	
-	
+
+
 
 	/**
 	 * update_game method alters a record in the users table.
@@ -207,29 +207,27 @@ class Game_model extends CI_Model{
 	 * Option: Values
 	 * --------------
 	 * idGame		(required)
-	 * numberOfSets
-	 * numberOfGames
 	 * completedDate
-	 * scheduledDate
-	 * idRound
-	 * teams (array)
-	 * 	idTeam
+	 * server
+	 * idCourt
+	 * points (assoc array)
+	 * 	idTeam => points (int)
+	 * gameType
 	 *
 	 * @param array $data
-	 * @return int affected_rows()
+	 * @return int affected rows, false if not a valid update call
 	 */
-	/* Not implemented yet
 
-	 function update_game($data = array())
-	 {
+	function update_game($data = array())
+	{
 		// required values
 		if(!$this->_required(array('idGame'), $data)) return false;
 
 		// qualification (make sure that we're not allowing the site to update data that it shouldn't)
-		$qualificationArray = array('numberOfSets', 'numberOfGames', 'completedDate', 'scheduledDate');
+		$qualificationArray = array('completedDate', 'server', 'idCourt', 'gameType');
 		foreach($qualificationArray as $qualifier)
 		{
-		if(isset($data[$qualifier])) $this->db->set($qualifier, $data[$qualifier]);
+			if(isset($data[$qualifier])) $this->db->set($qualifier, $data[$qualifier]);
 		}
 
 		$this->db->where('idGame', $data['idGame']);
@@ -240,35 +238,24 @@ class Game_model extends CI_Model{
 		if($this->db->affected_rows() == false) return false;
 		$affectedCount += $this->db->affected_rows();
 
-		if(isset($data['idRound'])){
+		if(isset($data['points'])){
+			foreach ($data['points'] as $key => $value){
+			$this->db->where('idGame', $data['idGame']);
+			$this->db->where('idTeam', $key);
+			$this->db->set('points', $value);
+			$this->db->update('teamgame');
+			if($this->db->affected_rows() == false) return false;
+			$affectedCount += $this->db->affected_rows();
 
-		$this->db->where('idGame', $data['idGame']);
-		$this->db->set('idRound', $data['idRound']);
-		$this->db->update('roundgame');
-		if($this->db->affected_rows() == false) return false;
-		$affectedCount += $this->db->affected_rows();
+			}
 		}
-		if(isset($data['teams']) && count($data['teams'] == 2)){
+		
 
-		$this->db->where('idGame', $data['idGame']);
-		$this->db->delete('teamgame');
-		if($this->db->affected_rows() == false) return false;
-		$affectedCount += $this->db->affected_rows();
-		foreach($data['teams'] as $idTeam ){
-		$this->db->set('idTeam', $idTeam);
-		$this->db->set('idGame', $data['idGame']);
-		$this->db->insert('teamgame');
-		if($this->db->affected_rows() == false) return false;
-		$affectedCount += $this->db->affected_rows();
-		}
-		}
-
-		// Return the number of rows updated, or false if the row could not be inserted
+		// Return the number of rows updated, or false if the row could not be updated
 		return affectedCount;
-		}
-		*/
-	
-	
+	}
+
+
 	/**
 	 *
 	 * NOT YET AVAILABLE (data integrity calls need to be implemented)
@@ -291,14 +278,14 @@ class Game_model extends CI_Model{
 
 	/**
 	 * get_courts returns an array of court information
-	 * 
+	 *
 	 * Returns (array of objects)
 	 * --------------------------
 	 * idCourt
 	 * name
 	 * description
-	 * alias 
-	 * 
+	 * alias
+	 *
 	 *  @param idCourt
 	 *  @return array of court objects or false if no results
 	 */
@@ -308,7 +295,7 @@ class Game_model extends CI_Model{
 		if($query->num_rows() == 0) return false;
 		return $query->result();
 	}
-	
+
 	function update_court($data = Array()){
 		// required values
 		if(!$this->_required(array('idCourt'), $data)) return false;
@@ -317,16 +304,16 @@ class Game_model extends CI_Model{
 		$qualificationArray = array('name', 'description', 'alias');
 		foreach($qualificationArray as $qualifier)
 		{
-		if(isset($data[$qualifier])) $this->db->set($qualifier, $data[$qualifier]);
+			if(isset($data[$qualifier])) $this->db->set($qualifier, $data[$qualifier]);
 		}
 
 		$this->db->where('idCourt', $data['idCourt']);
 
 		// Execute the query
 		$this->db->update('court');
-		return $this->db->affected_rows();		
+		return $this->db->affected_rows();
 	}
-	
+
 	//utility methods
 
 	/**
