@@ -75,5 +75,10 @@ endif;
 </form>
 
 <p>
-<?=anchor("adhoc_matches/".$idMatch, "Back to Match");?>
+<?php if ($game): ?>
+	<?=anchor("adhoc_matches/sets/".$idMatch."/".$idSet, "Back to Set Details");?>
+<?php else: ?>
+	<?=anchor("adhoc_matches/".$idMatch, "Back to Match");?>
+<?php endif; ?>
+
 </p>

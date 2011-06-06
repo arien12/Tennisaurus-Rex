@@ -139,6 +139,7 @@ class Adhoc_Matches extends MainController {
     	
     	$idMatch = $this->uri->segment(3);
     	$idGame = $this->uri->segment(4);
+    	$idSet = $this->uri->segment(5);
     	
     	$this->load->model('Game_model');
     	$games = $this->Game_model->get_games(array('idGame' => $idGame));
@@ -170,6 +171,7 @@ class Adhoc_Matches extends MainController {
     	$players = $this->Player_model->get_players(array('idTeam' => $teamIds));
     	
     	$data = array('idMatch' => $idMatch, 
+    				  'idSet' => $idSet,
     				  'teams' => $teams, 
     				  'players' => $players,
     				  'game' => $game);

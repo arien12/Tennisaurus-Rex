@@ -12,7 +12,7 @@
 	</tr>
 	<?php for ($i=0; $i < count($set->games); $i++): ?>
 	<tr>
-		<th><?=anchor("adhoc_matches/edit_game_view/".$match->idMatch."/".$set->games[$i]->idGame, "Game ".($i+1)) ?></th>
+		<th><?=anchor("adhoc_matches/edit_game_view/".$match->idMatch."/".$set->games[$i]->idGame."/".$set->idSet, "Game ".($i+1)) ?></th>
 		<?php 
 		if (intval($set->games[$i]->scores[0]) > intval($set->games[$i]->scores[1])): 
  			$team1Status = "winner"; 
