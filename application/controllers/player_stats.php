@@ -11,9 +11,13 @@ class Player_Stats extends MainController {
       	
       	// Find out who the logged in player is
     	$this->load->model('Team_model');
-      	$currTeam = $this->Team_model->get_teams(array('players' => array(parent::getCurrentPlayerId())));
+    	$teamWhere = array (
+			'players' => array(parent::getCurrentPlayerId()),
+			'isSingle' => 1
+    	);
+      	$currTeams = $this->Team_model->get_teams($teamWhere);
+      	$currTeam = $currTeams[0];
       	
-      	var_dump($currTeam);
       	$this->load->model('Game_model');
     	$games = $this->Game_model->get_games(array('teams' => array($currTeam->idTeam)));
     	
@@ -38,10 +42,10 @@ class Player_Stats extends MainController {
       		}
       	}
     	
-    	$data = array('won' => $gamesWon, 
-    				  'lost' => $gamesLost);
+    	$data = array('gamesWon' => $gamesWon, 
+    				  'gamesLost' => $gamesLost);
       	
-      	$this->masterpage->addContentPage ( 'stats/player_stats', 'content', $data );
+      	$this->masterpage->addContentPage ( 'stats/player_stats_view', 'content', $data );
 			
 	    // Show the masterpage to the world!
 	    $this->masterpage->show ( );
