@@ -50,12 +50,16 @@
 			  	</div>
 		    </li>
 		    <li>
-			    <label for="numOfSets"># of Sets: </label>
-				<input type="text" id="numOfSets" name="numOfSets" value="3" class="numText"/>
+			    <label for="numOfSets">First to how many sets?<em>*</em></label>
+			    <select id="numOfSets" name="numOfSets">
+			    	<option value="1">1</option>
+			      	<option value="3" selected="selected">3</option>
+			      	<option value="5">5</option>
+				</select>
 		    </li>
 		    <li>
-			    <label for="numOfGames"># of Games Per Set: </label>
-				<input type="text" id="numOfGames" name="numOfGames" value="3" class="numText"/>
+			    <label for="numOfGames">First to how many games?<em>*</em></label>
+				<input type="text" id="numOfGames" name="numOfGames" value="6" class="numText"/>
 		    </li>
 		    <li>
 			    <label for="court">Court: </label>
@@ -105,12 +109,16 @@
 			  	</div>
 		    </li>
 		    <li>
-			    <label for="numOfSets"># of Sets: </label>
-				<input type="text" id="numOfSets" name="numOfSets" value="3" class="numText"/>
+			    <label for="numOfSets">First to how many sets?<em>*</em></label>
+			    <select id="numOfSets" name="numOfSets">
+			    	<option value="1">1</option>
+			      	<option value="3" selected="selected">3</option>
+			      	<option value="5">5</option>
+				</select>
 		    </li>
 		    <li>
-			    <label for="numOfGames"># of Games Per Set: </label>
-				<input type="text" id="numOfGames" name="numOfGames" value="3" class="numText"/>
+			    <label for="numOfGames">First to how many games?<em>*</em></label>
+				<input type="text" id="numOfGames" name="numOfGames" value="6" class="numText"/>
 		    </li>
 		    <li>
 			    <label for="court">Court: </label>

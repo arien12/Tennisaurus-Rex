@@ -207,7 +207,7 @@ form.fstyle li#send {
 		
 form.fstyle label {
 	float:left;
-	width:165px;
+	width:180px;
 	text-align:left;	
 	margin-right:7px;
 	color:#0066CC;
@@ -223,7 +223,7 @@ form.fstyle textarea {
 	padding:4px;
 	font:13px Georgia, "Times New Roman", Times, serif;
 	border:1px solid #999999;
-	width:300px;
+	width:285px;
 }
 
 form.fstyle input.numTxt {
@@ -234,7 +234,7 @@ form.fstyle select {
 	padding:4px;
 	font:13px Georgia, "Times New Roman", Times, serif;
 	border:1px solid #999999;
-	width:310px;
+	width:295px;
 }
 			
 form.fstyle input:focus,
