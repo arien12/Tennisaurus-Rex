@@ -346,17 +346,18 @@ class Adhoc_Matches extends MainController {
 						$team1Score = $game->points[1]->points;
 						$team2Score = $game->points[0]->points;
 					}
-					
 					$myGame->idGame = $game->idGame;
 					$myGame->scores = array($team1Score, $team2Score);
-					array_push($game_scores, $myGame);
+					$game_scores[] = clone $myGame;
 				}
 				$currSet->idSet = $idSet;
 				$currSet->games = $game_scores;
 				$currSet->setNum = $setCount;
 				
-				array_push($sets, $currSet);
+				$sets[] = clone $currSet;
 				
+				// If we are just looking for an individual set and we found it
+				// then no need to look at the rest of the sets
 				if ($idSet && ($set->idSet == $idSet)) {
 					break;
 				}
