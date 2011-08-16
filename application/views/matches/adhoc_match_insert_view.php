@@ -52,14 +52,25 @@
 		    <li>
 			    <label for="numOfSets">First to how many sets?<em>*</em></label>
 			    <select id="numOfSets" name="numOfSets">
-			    	<option value="1">1</option>
-			      	<option value="3" selected="selected">3</option>
-			      	<option value="5">5</option>
+			    	<option value="1" selected="selected">1</option>
+			      	<option value="2">2</option>
+			      	<option value="3">3</option>
 				</select>
 		    </li>
 		    <li>
 			    <label for="numOfGames">First to how many games?<em>*</em></label>
-				<input type="text" id="numOfGames" name="numOfGames" value="6" class="numText"/>
+				<select id="numOfGames" name="numOfGames">
+			    	<option value="1">1</option>
+			      	<option value="2" selected="selected">2</option>
+			      	<option value="3">3</option>
+			      	<option value="4">4</option>
+			      	<option value="5">5</option>
+			      	<option value="6">6</option>
+				</select>
+		    </li>
+		    <li>
+		    	<label for="winByTwo">Must win by two games?</label>
+		    	<input type="checkbox" id="winByTwo" checked="checked" />
 		    </li>
 		    <li>
 			    <label for="court">Court: </label>
@@ -111,14 +122,25 @@
 		    <li>
 			    <label for="numOfSets">First to how many sets?<em>*</em></label>
 			    <select id="numOfSets" name="numOfSets">
-			    	<option value="1">1</option>
-			      	<option value="3" selected="selected">3</option>
-			      	<option value="5">5</option>
+			    	<option value="1" selected="selected">1</option>
+			      	<option value="2">2</option>
+			      	<option value="3">3</option>
 				</select>
 		    </li>
 		    <li>
 			    <label for="numOfGames">First to how many games?<em>*</em></label>
-				<input type="text" id="numOfGames" name="numOfGames" value="6" class="numText"/>
+				<select id="numOfGames" name="numOfGames">
+			    	<option value="1">1</option>
+			      	<option value="2" selected="selected">2</option>
+			      	<option value="3">3</option>
+			      	<option value="4">4</option>
+			      	<option value="5">5</option>
+			      	<option value="6">6</option>
+				</select>
+		    </li>
+		    <li>
+		    	<label for="winByTwo">Must win by two games?</label>
+		    	<input type="checkbox" id="winByTwo" checked="checked" />
 		    </li>
 		    <li>
 			    <label for="court">Court: </label>
