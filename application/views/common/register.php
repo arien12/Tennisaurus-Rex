@@ -1,3 +1,4 @@
+<!--
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#registerForm").submit(function() {
@@ -17,8 +18,10 @@ $(document).ready(function() {
 });
 
 </script>
+-->
+<?php echo validation_errors(); ?>
 <? 
-$attributes = array('id'=>'registerForm', 'class' => 'fstyle','onsubmit'=>"return false;");
+$attributes = array('id'=>'registerForm', 'class' => 'fstyle');
 echo form_open('tenniscontroller/processregistration', $attributes);
 ?>
 
@@ -34,7 +37,7 @@ echo form_open('tenniscontroller/processregistration', $attributes);
 		?>
     </li>
     <li>
-    	<label for="password">Password</label>
+    	<label for="password">Password:</label>
     	<span id="password_error" class="error"></span>
 		<? $password = array(
 				'name'=>'password',
@@ -43,7 +46,7 @@ echo form_open('tenniscontroller/processregistration', $attributes);
 		?>
     </li>
     <li>
-    	<label for="passwordvalidation">Retype Password</label>
+    	<label for="passwordvalidation">Retype Password:</label>
 		<? $rpassword = array(
 				'name'=>'passwordvalidation',
 				'id'=>'passwordvalidation');
@@ -56,9 +59,6 @@ echo form_open('tenniscontroller/processregistration', $attributes);
 		<input type="email" id="email" name="email" />
     </li>
     <li id="send">
-    <!--  
-    	<button type="submit" id="registerSubmit">Register</button>
-    	-->
     	<input type="submit" value="Submit" />
     </li>
   </ol>

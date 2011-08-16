@@ -25,8 +25,9 @@ class TennisController extends MainController {
 	public function processregistration(){
 
 		//TODO::add a captcha, validation, send an email
-	$this->load->library("form_validation");
+		$this->load->library("form_validation");
 		
+		/*
 		$fields['name'] = 'name';
 		$fields['password'] = 'password';
 		$fields['passwordvalidation'] = 'passwordvalidation';
@@ -38,14 +39,15 @@ class TennisController extends MainController {
 		$rules['passwordvalidation'] = 'trim|required';
 		$rules['email'] = 'trim|required|valid_email';
 		$this->form_validation->set_rules($rules);
+		*/
+		
+		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[passwordvalidation]');
+		$this->form_validation->set_rules('passwordvalidation', 'Password Verification', 'trim|required');
+		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
 
 		if ($this->form_validation->run() == FALSE) {
-			$data = array(
-			'name' => $this->form_validation->name_error, 
-			'password' => $this->form_validation->password_error, 
-			'email' => $this->form_validation->email_error
-			);
-			echo json_encode($data);
+			$this->register();
 		} else {
 			$this->load->model('Player_model');
 			$nameCheckArray = array('name'=>$_POST['name']);
