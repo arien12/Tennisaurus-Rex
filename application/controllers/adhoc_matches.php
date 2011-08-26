@@ -294,26 +294,83 @@ class Adhoc_Matches extends MainController {
         $this->masterpage->show();
     }
 	
-	public function insert_match() {
-
-		$teamOne = $_POST['team1'];
-		$teamTwo = $_POST['team2'];
-		$numOfSets = $_POST['numOfSets'];
-		$numOfGames = $_POST['numOfGames'];
-		$court = $_POST['court'];
+	public function insert_singles_match() {
 		
+		// Load form validation library
+    	$this->load->library("form_validation");
+    	
+    	// Set up form validation rules
+    	$this->form_validation->set_message('is_natural', '%s must be selected.');
+    	$this->form_validation->set_rules('player1', 'Player 1', 'is_natural|required');
+    	$this->form_validation->set_rules('player2', 'Player 2', 'is_natural|required');
+    	$this->form_validation->set_rules('numOfSets', 'Number of Sets', 'is_natural_no_zero|less_than[4]|required');
+    	$this->form_validation->set_rules('numOfGames', 'Number of Games', 'is_natural_no_zero|less_than[7]|required');
+		
+		if ($this->form_validation->run() == FALSE) {
+			
+			$this->adhoc_match_insert_view();
+			
+		} else {
+			
+			$playerOne = $_POST['player1'];
+			$playerTwo = $_POST['player2'];
+			$numOfSets = $_POST['numOfSets'];
+			$numOfGames = $_POST['numOfGames'];
+			$court = $_POST['court'];
+			
+			$matchdata = array(
+				'teams'=>array($playerOne,$playerTwo),
+				'numberOfSets'=>$numOfSets,
+				'numberOfGames'=>$numOfGames,
+				'completedDate'=>date("y-m-d h:i a"),
+				'scheduledDate'=>date("y-m-d h:i a")
+			);
+			
+			$this->insert_match($matchdata);
+			
+		}
+	}
+	
+	public function insert_team_match() {
+		
+		// Load form validation library
+    	$this->load->library("form_validation");
+    	
+    	// Set up form validation rules
+    	$this->form_validation->set_message('is_natural', '%s must be selected.');
+    	$this->form_validation->set_rules('team1', 'Team 1', 'is_natural|required');
+    	$this->form_validation->set_rules('team2', 'Team 2', 'is_natural|required');
+    	$this->form_validation->set_rules('numOfSets', 'Number of Sets', 'is_natural_no_zero|less_than[4]|required');
+    	$this->form_validation->set_rules('numOfGames', 'Number of Games', 'is_natural_no_zero|less_than[7]|required');
+		
+		if ($this->form_validation->run() == FALSE) {
+			
+			$this->adhoc_match_insert_view();
+			
+		} else {
+			
+			$teamOne = $_POST['team1'];
+			$teamTwo = $_POST['team2'];
+			$numOfSets = $_POST['numOfSets'];
+			$numOfGames = $_POST['numOfGames'];
+			$court = $_POST['court'];
+			
+			$matchdata = array(
+				'teams'=>array($teamOne,$teamTwo),
+				'numberOfSets'=>$numOfSets,
+				'numberOfGames'=>$numOfGames,
+				'completedDate'=>date("y-m-d h:i a"),
+				'scheduledDate'=>date("y-m-d h:i a")
+			);
+			
+			$this->insert_match($matchdata);
+			
+		}
+	}
+	
+	private function insert_match($matchdata) {
 		$this->load->model('Match_model');
-		
-		$matchdata = array(
-			'teams'=>array($teamOne,$teamTwo),
-			'numberOfSets'=>$numOfSets,
-			'numberOfGames'=>$numOfGames,
-			'completedDate'=>date("y-m-d h:i a"),
-			'scheduledDate'=>date("y-m-d h:i a")
-		);
-		
 		$matchID = $this->Match_model->insert_match($matchdata);
-		
 		redirect('adhoc_matches');
 	}
 	
