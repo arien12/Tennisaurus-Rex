@@ -24,7 +24,7 @@
 		    <li>
 		    	<div class="ui-widget" id="player1_combobox">
 			      	<label for="player1">Player 1<em>*</em></label>
-				    <select id="player1" name="team1">
+				    <select id="player1" name="player1">
 				    	<option value="-1"></option>
 						<?php if ($players): ?>
 							<?php foreach($players as $row): ?>
@@ -41,7 +41,7 @@
 		    <li>
 		    	<div class="ui-widget" id="player2_combobox">
 			    	<label for="player2">Player 2<em>*</em></label>
-			      	<select id="player2" name="team2">
+			      	<select id="player2" name="player1">
 			      		<option value="-1"></option>
 						<?php if ($players): ?>
 							<?php foreach($players as $row): ?>
