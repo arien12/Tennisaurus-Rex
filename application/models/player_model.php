@@ -42,7 +42,7 @@ class Player_model extends CI_Model{
 		$this->db->distinct('idPlayer, name, email, password, idPlayerType');
 		
 		// Add where clauses to query
-		$qualificationArray = array('idPlayer', 'email', 'idPlayerType', 'email');
+		$qualificationArray = array('idPlayer', 'name', 'idPlayerType', 'email');
 		foreach($qualificationArray as $qualifier)
 		{
 			if(isset($data[$qualifier])) $this->db->where($qualifier, $data[$qualifier]);

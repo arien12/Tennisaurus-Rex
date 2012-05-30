@@ -41,63 +41,81 @@ class TennisController extends MainController {
 		$this->form_validation->set_rules($rules);
 		*/
 		
-		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+		
+		$this->form_validation->set_rules('name', 'Name', 'trim|required|callback_username_check');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[passwordvalidation]');
 		$this->form_validation->set_rules('passwordvalidation', 'Password Verification', 'trim|required');
-		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|callback_email_check');
 
 		if ($this->form_validation->run() == FALSE) {
 			$this->register();
 		} else {
-			$this->load->model('Player_model');
-			$nameCheckArray = array('name'=>$_POST['name']);
-			$nameCheck = $this->Player_model->get_players($nameCheckArray);
-			$emailCheckArray = array('email'=>$_POST['email']);
-			$emailCheck = $this->Player_model->get_players($emailCheckArray);
-			if($nameCheck == FALSE && $emailCheck == false){
-				$data = array();
-				$data['name'] = $_POST['name'];
-				$data['email'] = $_POST['email'];
-				$this->load->helper('Security');
-				$data['password'] = do_hash($_POST['password'], 'md5');
-				$data['idPlayerType'] = 1;
 
-				$playerId = array('idPlayer' => $this->Player_model->insert_player($data));
-				if($playerId['idPlayer']== False)
+			$data = array();
+			$data['name'] = $_POST['name'];
+			$data['email'] = $_POST['email'];
+			$this->load->helper('Security');
+			$data['password'] = do_hash($_POST['password'], 'md5');
+			$data['idPlayerType'] = 1;
+
+			$playerId = array('idPlayer' => $this->Player_model->insert_player($data));
+			if($playerId['idPlayer']== FALSE)
+			{
+				redirect('tenniscontroller/register', 'refresh');
+			}
+			else{
+				$players = $this->Player_model->get_players($playerId);
+				if(count($players) != 1)
 				{
+					//@TODO::add an error page
 					redirect('tenniscontroller/register', 'refresh');
 				}
 				else{
-					$players = $this->Player_model->get_players($playerId);
-					if(count($players) != 1)
-					{
-						//@TODO::add an error page
-						redirect('tenniscontroller/register', 'refresh');
-					}
-					else{
-						$this->load->model('Team_model');
-						$insertTeamData = array(
-				'name'=>$players[0]->name,
-				'tag'=> NULL,
-				'desc'=>'',
-				'isSingle'=>TRUE,
-				'idPlayer1'=>$players[0]->idPlayer
-						);
-						$this->Team_model->insert_team($insertTeamData);
-						parent::addSessionInfo($players[0]->name, $players[0]->idPlayer, $players[0]->idPlayerType);
-						redirect('tenniscontroller/index', 'refresh');
-					}
+					$this->load->model('Team_model');
+					$insertTeamData = array(
+						'name'=>$players[0]->name,
+						'tag'=> NULL,
+						'desc'=>'',
+						'isSingle'=>TRUE,
+						'idPlayer1'=>$players[0]->idPlayer
+					);
+					$this->Team_model->insert_team($insertTeamData);
+					parent::addSessionInfo($players[0]->name, $players[0]->idPlayer, $players[0]->idPlayerType);
+					redirect('tenniscontroller/index', 'refresh');
 				}
-
-			}else{
-				$data = array(
-			'name' => $this->validation->already_exists, 
-			'email' => $this->validation->already_exists
-			);
-			echo json_encode($data);
 			}
 		} 
 		
+	}
+	
+	public function username_check($str) {
+		$this->load->model('Player_model');
+		$nameCheckArray = array('name'=>$str);
+		$nameCheck = $this->Player_model->get_players($nameCheckArray);
+		if ($nameCheck)
+		{
+			$this->form_validation->set_message('username_check', 'The %s is already registered.');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
+	
+	public function email_check($str) {
+		$this->load->model('Player_model');
+		$emailCheckArray = array('email'=>$str);
+		$emailCheck = $this->Player_model->get_players($emailCheckArray);
+		if ($emailCheck)
+		{
+			$this->form_validation->set_message('email_check', 'The %s is already registered.');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
 	}
 	
 	public function login() {

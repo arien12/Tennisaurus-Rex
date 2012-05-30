@@ -33,7 +33,7 @@ echo form_open('tenniscontroller/processregistration', $attributes);
 		<? $name = array(
 				'name'=>'name',
 				'id'=>'name');
-			echo form_input($name);
+			echo form_input($name, set_value('name'));
 		?>
     </li>
     <li>
@@ -56,7 +56,11 @@ echo form_open('tenniscontroller/processregistration', $attributes);
     <li>
     	<label for="email">Email:</label>
     	<span id="email_error" class="error"></span>
-		<input type="email" id="email" name="email" />
+    	<? $email = array(
+				'name'=>'email',
+				'id'=>'email');
+			echo form_input($email, set_value("email"));
+		?>
     </li>
     <li id="send">
     	<input type="submit" value="Submit" />
